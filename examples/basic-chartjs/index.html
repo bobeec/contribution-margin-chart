@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CVP Analysis Chart Demo - Contribution Margin Chart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .trademark-notice {
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin: 15px auto;
+      max-width: 800px;
+      font-size: 0.85rem;
+    }
+
+    .chart-section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .chart-section h2 {
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+
+    .metrics-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .metric-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border-left: 4px solid #667eea;
+    }
+
+    .metric-card.profit {
+      border-left-color: #417505;
+    }
+
+    .metric-card.loss {
+      border-left-color: #D0021B;
+    }
+
+    .metric-card .label {
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+    }
+
+    .metric-card .value {
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .metric-card .sub {
+      color: #888;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    .data-input {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .data-input h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .input-group input {
+      padding: 10px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 15px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+
+    .multi-period-section {
+      margin-top: 40px;
+    }
+
+    footer {
+      text-align: center;
+      color: white;
+      opacity: 0.8;
+      margin-top: 40px;
+      padding: 20px;
+    }
+
+    footer a {
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .chart-container {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 CVP Analysis Chart</h1>
+      <p>Cost-Volume-Profit Analysis Visualization Library</p>
+      <div class="trademark-notice">
+        ⚠️ This library implements general CVP analysis (Cost-Volume-Profit Analysis).
+        STRAC® is a registered trademark of Management College Co., Ltd.
+      </div>
+    </header>
+
+    <section class="chart-section">
+      <h2>🎯 Interactive Demo</h2>
+      
+      <div class="data-input">
+        <h3>Input Data (千円単位)</h3>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="sales">売上高 (Sales)</label>
+            <input type="number" id="sales" value="10000" min="0">
+          </div>
+          <div class="input-group">
+            <label for="variableCosts">変動費 (Variable Costs)</label>
+            <input type="number" id="variableCosts" value="6200" min="0">
+          </div>
+          <div class="input-group">
+            <label for="fixedCosts">固定費 (Fixed Costs)</label>
+            <input type="number" id="fixedCosts" value="3100" min="0">
+          </div>
+        </div>
+        <button class="btn" onclick="updateChart()">📈 Update Chart</button>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="cvpChart"></canvas>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: #4A90E2;"></div>
+          <span>売上高</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #F5A623;"></div>
+          <span>変動費</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #7ED321;"></div>
+          <span>限界利益</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #9B9B9B;"></div>
+          <span>固定費</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #417505;"></div>
+          <span>経営利益</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #D0021B;"></div>
+          <span>損失</span>
+        </div>
+      </div>
+
+      <div class="metrics-panel" id="metricsPanel">
+        <!-- Metrics will be inserted here -->
+      </div>
+    </section>
+
+    <section class="chart-section multi-period-section">
+      <h2>📅 Multi-Period Comparison</h2>
+      <div class="chart-container">
+        <canvas id="multiPeriodChart"></canvas>
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        <strong>@contribution-margin/chartjs</strong> v0.1.0 |
+        <a href="https://github.com/contribution-margin/contribution-margin-chart" target="_blank">GitHub</a>
+      </p>
+      <p>MIT License | Built with Chart.js</p>
+    </footer>
+  </div>
+
+  <script type="module" src="/main.ts"></script>
+</body>
+</html>

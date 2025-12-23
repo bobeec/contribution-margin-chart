@@ -1,0 +1,58 @@
+{
+  "name": "@contribution-margin/chartjs",
+  "version": "0.1.0",
+  "description": "Chart.js plugin for CVP (Cost-Volume-Profit) analysis charts - Horizontal stacked bar charts for profit structure visualization",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "cvp-analysis",
+    "contribution-margin",
+    "break-even-point",
+    "chartjs",
+    "chart.js",
+    "plugin",
+    "management-accounting",
+    "visualization"
+  ],
+  "author": "Contribution Margin Chart Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/contribution-margin/contribution-margin-chart.git",
+    "directory": "packages/chartjs"
+  },
+  "homepage": "https://github.com/contribution-margin/contribution-margin-chart/tree/main/packages/chartjs#readme",
+  "peerDependencies": {
+    "chart.js": "^3.0.0 || ^4.0.0"
+  },
+  "dependencies": {
+    "@contribution-margin/core": "workspace:*"
+  },
+  "devDependencies": {
+    "chart.js": "^4.4.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "sideEffects": false
+}

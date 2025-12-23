@@ -1,0 +1,64 @@
+{
+  "name": "contribution-margin-chart",
+  "version": "0.0.0",
+  "private": true,
+  "description": "CVP (Cost-Volume-Profit) analysis chart library for JavaScript - Visualize contribution margin, break-even point, and profit structure",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/contribution-margin/contribution-margin-chart.git"
+  },
+  "keywords": [
+    "cvp-analysis",
+    "contribution-margin",
+    "break-even-point",
+    "management-accounting",
+    "chart",
+    "visualization",
+    "chartjs",
+    "profit-structure",
+    "cost-volume-profit"
+  ],
+  "author": "Contribution Margin Chart Contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:core": "pnpm --filter @contribution-margin/core build",
+    "build:chartjs": "pnpm --filter @contribution-margin/chartjs build",
+    "test": "pnpm -r test",
+    "test:core": "pnpm --filter @contribution-margin/core test",
+    "test:chartjs": "pnpm --filter @contribution-margin/chartjs test",
+    "lint": "eslint packages/*/src --ext .ts,.tsx",
+    "lint:fix": "eslint packages/*/src --ext .ts,.tsx --fix",
+    "format": "prettier --write \"packages/*/src/**/*.ts\"",
+    "format:check": "prettier --check \"packages/*/src/**/*.ts\"",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "prepare": "husky install || true",
+    "dev:example": "pnpm --filter basic-chartjs-example dev"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
