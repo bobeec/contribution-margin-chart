@@ -87,18 +87,27 @@ export const ContributionMarginPlugin: Plugin<'bar', ContributionMarginPluginOpt
 
     // Configure chart for horizontal bar display
     chart.options.indexAxis = 'y';
+    
+    // Get max value from CVP data for proper scale
+    const maxValue = chart.$cvp?.results[0]?.input.sales ?? 0;
+    const displayOptions = chart.$cvp?.options;
+    
     chart.options.scales = {
       x: {
+        type: 'linear',
         display: true,
+        min: 0,
+        max: maxValue > 0 ? maxValue * 1.1 : undefined, // Add 10% padding
         grid: {
           display: true,
           color: '#E5E5E5',
         },
         ticks: {
+          stepSize: maxValue > 0 ? calculateStepSize(maxValue) : undefined,
           callback: function(value) {
             // Format axis ticks
             if (typeof value === 'number') {
-              return formatAxisValue(value, chart.$cvp?.options);
+              return formatAxisValue(value, displayOptions);
             }
             return value;
           },
@@ -256,21 +265,66 @@ function processCVPData(options: ContributionMarginPluginOptions): CVPChartData 
 }
 
 /**
+ * Calculate appropriate step size for axis ticks
+ */
+function calculateStepSize(maxValue: number): number {
+  // Find a nice round step size that gives roughly 5-10 ticks
+  const roughStep = maxValue / 5;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(roughStep)));
+  const normalized = roughStep / magnitude;
+  
+  let niceStep: number;
+  if (normalized <= 1) {
+    niceStep = magnitude;
+  } else if (normalized <= 2) {
+    niceStep = 2 * magnitude;
+  } else if (normalized <= 5) {
+    niceStep = 5 * magnitude;
+  } else {
+    niceStep = 10 * magnitude;
+  }
+  
+  return niceStep;
+}
+
+/**
  * Format value for axis display
  */
 function formatAxisValue(value: number, options?: DisplayOptions): string {
   const unitMode = options?.unitMode ?? 'thousand';
   const locale = options?.locale ?? 'ja-JP';
+  const currencySymbol = options?.currencySymbol ?? '¥';
+
+  // Handle zero
+  if (value === 0) {
+    return '0';
+  }
 
   switch (unitMode) {
-    case 'thousand':
-      return `${(value / 1000).toLocaleString(locale)}千`;
-    case 'million':
-      return `${(value / 1_000_000).toLocaleString(locale)}百万`;
-    case 'billion':
-      return `${(value / 1_000_000_000).toLocaleString(locale)}億`;
+    case 'thousand': {
+      const thousands = value / 1000;
+      // Format as integer if it's a whole number
+      const formatted = Number.isInteger(thousands) 
+        ? thousands.toLocaleString(locale)
+        : thousands.toLocaleString(locale, { maximumFractionDigits: 1 });
+      return `${currencySymbol}${formatted}千円`;
+    }
+    case 'million': {
+      const millions = value / 1_000_000;
+      const formatted = Number.isInteger(millions)
+        ? millions.toLocaleString(locale)
+        : millions.toLocaleString(locale, { maximumFractionDigits: 1 });
+      return `${currencySymbol}${formatted}百万円`;
+    }
+    case 'billion': {
+      const billions = value / 1_000_000_000;
+      const formatted = Number.isInteger(billions)
+        ? billions.toLocaleString(locale)
+        : billions.toLocaleString(locale, { maximumFractionDigits: 1 });
+      return `${currencySymbol}${formatted}億円`;
+    }
     default:
-      return value.toLocaleString(locale);
+      return `${currencySymbol}${value.toLocaleString(locale)}`;
   }
 }
 
