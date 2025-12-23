@@ -1,0 +1,103 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.0] - 2025-12-23
+
+### Added
+
+#### @contribution-margin/core v0.1.0
+
+- **CVPCalculator**: Core calculation engine for CVP (Cost-Volume-Profit) analysis
+  - Contribution margin calculation
+  - Break-even point (BEP) calculation
+  - Safety margin calculation
+  - Operating profit calculation
+  - Various financial ratios (contribution margin ratio, operating profit ratio, variable cost ratio)
+  - Multi-period calculation support
+  - Static utility methods (`calculateRequiredSales`, `calculateProfitAtSales`)
+
+- **CVPValidator**: Input validation with comprehensive error/warning system
+  - Required field validation
+  - Numeric value validation (non-negative, positive)
+  - Business logic validation (e.g., variable costs not exceeding sales)
+  - Warning detection for edge cases
+
+- **LayoutEngine**: Chart layout generation
+  - Segment generation for horizontal stacked bar charts
+  - Annotation positioning for break-even point and profit markers
+  - Multiple loss display modes (`negative-bar`, `striped`, `overlay`)
+  - Configurable metrics display
+
+- **ValueFormatter**: Locale-aware value formatting
+  - Multiple unit support (none, thousand, million, billion, auto)
+  - Currency formatting (JPY, USD, EUR, GBP)
+  - Locale-based number formatting
+  - Percentage and ratio formatting
+
+- **Color Schemes**: Built-in color palettes
+  - `default`: Professional business colors
+  - `pastel`: Soft, accessible colors
+  - `vivid`: High-contrast vibrant colors
+  - `monochrome`: Grayscale palette
+  - `colorblind`: Accessible palette for color vision deficiency
+
+- **TypeScript**: Full TypeScript support with comprehensive type definitions
+
+#### @contribution-margin/chartjs v0.1.0
+
+- **Chart.js Plugin**: Integration with Chart.js v3/v4
+  - `CVPChartPlugin`: Plugin for rendering CVP charts
+  - `createCVPChart`: Factory function for creating charts
+  - `updateCVPChart`: Function for updating existing charts
+
+- **Features**:
+  - Horizontal stacked bar chart rendering
+  - Break-even point line with customizable style
+  - Loss display modes (negative-bar as default)
+  - Segment labels with automatic text color adjustment
+  - Annotation support (top, bottom, side positions)
+  - Responsive design
+  - Interactive tooltips
+
+- **Presets**: Built-in chart presets
+  - Japanese Standard preset with localized labels
+  - English Standard preset
+
+### Documentation
+
+- Comprehensive README with usage examples
+- API documentation for all public interfaces
+- Example application with Chart.js integration
+
+---
+
+## Release Notes
+
+### v0.1.0 - Initial Release
+
+This is the first public release of the Contribution Margin Chart library.
+
+**Key Features:**
+- Chart library agnostic core (`@contribution-margin/core`)
+- Chart.js plugin (`@contribution-margin/chartjs`)
+- Full TypeScript support
+- Internationalization ready (Japanese, English)
+- Comprehensive validation and error handling
+- 107 unit tests with Vitest
+
+**Target Use Cases:**
+- Management accounting dashboards
+- Financial reporting tools
+- Business intelligence applications
+- Educational materials for CVP analysis
+
+**Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
+
+[Unreleased]: https://github.com/contribution-margin/contribution-margin-chart/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/contribution-margin/contribution-margin-chart/releases/tag/v0.1.0
