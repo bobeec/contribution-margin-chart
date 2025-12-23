@@ -1,7 +1,8 @@
 /**
- * CVP Analysis Chart Demo - v0.2.0
- * Interactive demonstration of the @contribution-margin/chartjs plugin
- * Now featuring Treemap layout!
+ * CVP Analysis Chart Demo - v0.3.0
+ * Comprehensive demonstration of the @contribution-margin/chartjs library
+ * 
+ * This demo showcases various use cases for CVP (Cost-Volume-Profit) Treemap charts
  */
 
 import {
@@ -20,7 +21,6 @@ import {
   createTreemapChartConfig,
   CVPCalculator,
   ValueFormatter,
-  SAMPLE_DATA,
   type CVPInput,
 } from '@contribution-margin/chartjs';
 
@@ -36,8 +36,9 @@ Chart.register(
   ContributionMarginTreemapPlugin
 );
 
-// Global chart instance
-let mainChart: Chart<'bar'> | null = null;
+// ============================================================================
+// Configuration
+// ============================================================================
 
 // Formatter for displaying values
 const formatter = new ValueFormatter({
@@ -46,47 +47,64 @@ const formatter = new ValueFormatter({
   currencySymbol: '¥',
 });
 
-/**
- * Initialize the main CVP Treemap chart
- */
-function initMainChart(): void {
-  const canvas = document.getElementById('cvpChart') as HTMLCanvasElement;
+// Default display options (BEP line is OFF by default for Treemap)
+const defaultDisplayOptions = {
+  showBEPLine: false,  // Treemap形式ではBEPラインは不要
+  showValues: true,
+  showLabels: true,
+  showPercentages: false,
+  unitMode: 'thousand' as const,
+  locale: 'ja-JP',
+  currencySymbol: '¥',
+};
+
+// ============================================================================
+// Chart Instances
+// ============================================================================
+
+let interactiveChart: Chart<'bar'> | null = null;
+
+// ============================================================================
+// 1. Basic Chart
+// ============================================================================
+
+function initBasicChart(): void {
+  const canvas = document.getElementById('basicChart') as HTMLCanvasElement;
   if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  const config = createTreemapChartConfig({
+    input: {
+      label: '基本例',
+      sales: 10_000_000,
+      variableCosts: 4_000_000,
+      fixedCosts: 3_000_000,
+    },
+    title: '基本的なCVPグラフ',
+    display: defaultDisplayOptions,
+  });
+
+  new Chart(canvas, config);
+}
+
+// ============================================================================
+// 2. Interactive Chart
+// ============================================================================
+
+function initInteractiveChart(): void {
+  const canvas = document.getElementById('interactiveChart') as HTMLCanvasElement;
+  if (!canvas) return;
 
   const input = getInputData();
   const config = createTreemapChartConfig({
     input,
     title: '月次進捗',
-    display: {
-      showBEPLine: true,
-      showValues: true,
-      showLabels: true,
-      showPercentages: false,
-      lossDisplayMode: 'negative-bar',
-      unitMode: 'thousand',
-      locale: 'ja-JP',
-      currencySymbol: '¥',
-    },
-    metrics: {
-      display: {
-        contributionMarginRatio: true,
-        breakEvenPoint: true,
-        safetyMargin: true,
-      },
-      position: 'bottom',
-    },
+    display: defaultDisplayOptions,
   });
 
-  mainChart = new Chart(ctx, config);
+  interactiveChart = new Chart(canvas, config);
   updateMetricsPanel(input);
 }
 
-/**
- * Get input data from form
- */
 function getInputData(): CVPInput {
   const salesInput = document.getElementById('sales') as HTMLInputElement;
   const variableInput = document.getElementById('variableCosts') as HTMLInputElement;
@@ -100,33 +118,27 @@ function getInputData(): CVPInput {
   };
 }
 
-/**
- * Update the chart with new data
- */
 function updateChart(): void {
-  if (!mainChart) return;
+  if (!interactiveChart) return;
 
   const input = getInputData();
 
   // Update plugin options
-  const pluginOptions = (mainChart.options.plugins as any)?.contributionMarginTreemap;
+  const pluginOptions = (interactiveChart.options.plugins as any)?.contributionMarginTreemap;
   if (pluginOptions) {
     pluginOptions.input = input;
   }
 
   // Clear cached data
-  (mainChart as any).$cvpTreemap = undefined;
+  (interactiveChart as any).$cvpTreemap = undefined;
 
   // Update chart
-  mainChart.update();
+  interactiveChart.update();
 
   // Update metrics panel
   updateMetricsPanel(input);
 }
 
-/**
- * Update metrics panel with calculated values
- */
 function updateMetricsPanel(input: CVPInput): void {
   const panel = document.getElementById('metricsPanel');
   if (!panel) return;
@@ -169,10 +181,185 @@ function updateMetricsPanel(input: CVPInput): void {
   `;
 }
 
+// ============================================================================
+// 3. Profit Charts
+// ============================================================================
+
+function initProfitCharts(): void {
+  // High profit case
+  const canvas1 = document.getElementById('profitChart1') as HTMLCanvasElement;
+  if (canvas1) {
+    const config = createTreemapChartConfig({
+      input: {
+        label: '高収益',
+        sales: 10_000_000,
+        variableCosts: 3_000_000,
+        fixedCosts: 3_000_000,
+      },
+      display: defaultDisplayOptions,
+    });
+    new Chart(canvas1, config);
+  }
+
+  // Standard profit case
+  const canvas2 = document.getElementById('profitChart2') as HTMLCanvasElement;
+  if (canvas2) {
+    const config = createTreemapChartConfig({
+      input: {
+        label: '標準',
+        sales: 10_000_000,
+        variableCosts: 5_000_000,
+        fixedCosts: 3_000_000,
+      },
+      display: defaultDisplayOptions,
+    });
+    new Chart(canvas2, config);
+  }
+}
+
+// ============================================================================
+// 4. Loss Charts
+// ============================================================================
+
+function initLossCharts(): void {
+  // Minor loss case
+  const canvas1 = document.getElementById('lossChart1') as HTMLCanvasElement;
+  if (canvas1) {
+    const config = createTreemapChartConfig({
+      input: {
+        label: '軽度赤字',
+        sales: 10_000_000,
+        variableCosts: 5_000_000,
+        fixedCosts: 6_000_000,
+      },
+      display: {
+        ...defaultDisplayOptions,
+        lossDisplayMode: 'negative-bar',
+      },
+    });
+    new Chart(canvas1, config);
+  }
+
+  // Major loss case
+  const canvas2 = document.getElementById('lossChart2') as HTMLCanvasElement;
+  if (canvas2) {
+    const config = createTreemapChartConfig({
+      input: {
+        label: '重度赤字',
+        sales: 10_000_000,
+        variableCosts: 6_000_000,
+        fixedCosts: 6_000_000,
+      },
+      display: {
+        ...defaultDisplayOptions,
+        lossDisplayMode: 'negative-bar',
+      },
+    });
+    new Chart(canvas2, config);
+  }
+}
+
+// ============================================================================
+// 5. Monthly Comparison Charts
+// ============================================================================
+
+function initMonthlyCharts(): void {
+  const monthlyData = [
+    { id: 'monthChart1', label: '10月', sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 3_000_000 },
+    { id: 'monthChart2', label: '11月', sales: 9_000_000, variableCosts: 4_500_000, fixedCosts: 3_000_000 },
+    { id: 'monthChart3', label: '12月', sales: 12_000_000, variableCosts: 6_000_000, fixedCosts: 3_000_000 },
+  ];
+
+  monthlyData.forEach(data => {
+    const canvas = document.getElementById(data.id) as HTMLCanvasElement;
+    if (canvas) {
+      const config = createTreemapChartConfig({
+        input: {
+          label: data.label,
+          sales: data.sales,
+          variableCosts: data.variableCosts,
+          fixedCosts: data.fixedCosts,
+        },
+        display: {
+          ...defaultDisplayOptions,
+          showLabels: true,
+          showValues: true,
+        },
+      });
+      new Chart(canvas, config);
+    }
+  });
+}
+
+// ============================================================================
+// 6. Color Scheme Charts
+// ============================================================================
+
+function initColorCharts(): void {
+  const sampleInput = {
+    label: 'サンプル',
+    sales: 10_000_000,
+    variableCosts: 4_000_000,
+    fixedCosts: 3_000_000,
+  };
+
+  // Default colors
+  const canvas1 = document.getElementById('colorChart1') as HTMLCanvasElement;
+  if (canvas1) {
+    const config = createTreemapChartConfig({
+      input: sampleInput,
+      display: {
+        ...defaultDisplayOptions,
+        colorScheme: 'default',
+      },
+    });
+    new Chart(canvas1, config);
+  }
+
+  // Pastel colors
+  const canvas2 = document.getElementById('colorChart2') as HTMLCanvasElement;
+  if (canvas2) {
+    const config = createTreemapChartConfig({
+      input: sampleInput,
+      display: {
+        ...defaultDisplayOptions,
+        colorScheme: 'pastel',
+      },
+    });
+    new Chart(canvas2, config);
+  }
+
+  // Monochrome colors
+  const canvas3 = document.getElementById('colorChart3') as HTMLCanvasElement;
+  if (canvas3) {
+    const config = createTreemapChartConfig({
+      input: sampleInput,
+      display: {
+        ...defaultDisplayOptions,
+        colorScheme: 'monochrome',
+      },
+    });
+    new Chart(canvas3, config);
+  }
+}
+
+// ============================================================================
+// Initialize All Charts
+// ============================================================================
+
+function initAllCharts(): void {
+  initBasicChart();
+  initInteractiveChart();
+  initProfitCharts();
+  initLossCharts();
+  initMonthlyCharts();
+  initColorCharts();
+}
+
 // Make updateChart available globally
 (window as any).updateChart = updateChart;
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  initMainChart();
+  initAllCharts();
 });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CVP Analysis Treemap - Contribution Margin Chart v0.2.0</title>
+  <title>CVP Analysis Treemap - Contribution Margin Chart v0.3.0</title>
   <style>
     * {
       margin: 0;
@@ -16,10 +16,11 @@
       background: #f5f7fa;
       min-height: 100vh;
       padding: 20px;
+      line-height: 1.6;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
@@ -50,15 +51,15 @@
       margin-left: 10px;
     }
 
-    .trademark-notice {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
+    .notice {
+      background: #e8f4f8;
+      border: 1px solid #bee5eb;
       border-radius: 8px;
       padding: 12px 20px;
       margin: 15px auto;
       max-width: 800px;
       font-size: 0.85rem;
-      color: #856404;
+      color: #0c5460;
     }
 
     .chart-section {
@@ -72,26 +73,58 @@
 
     .chart-section h2 {
       color: #2c3e50;
-      margin-bottom: 20px;
-      font-size: 1.3rem;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
       display: flex;
       align-items: center;
       gap: 10px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+
+    .chart-section h3 {
+      color: #34495e;
+      margin: 20px 0 15px;
+      font-size: 1.1rem;
+    }
+
+    .chart-section p {
+      color: #555;
+      margin-bottom: 15px;
     }
 
     .chart-container {
       position: relative;
       width: 100%;
-      height: 350px;
+      height: 300px;
       margin: 20px 0;
       background: #fafbfc;
       border: 1px solid #e1e8ed;
       border-radius: 8px;
     }
 
+    .chart-container.large {
+      height: 350px;
+    }
+
+    .chart-container.small {
+      height: 200px;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .chart-grid .chart-container {
+      height: 250px;
+    }
+
     .metrics-panel {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 12px;
       margin-top: 20px;
     }
@@ -231,20 +264,118 @@
       text-decoration: underline;
     }
 
-    .layout-info {
-      background: #e8f4f8;
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
       border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
+      padding: 15px 20px;
+      margin: 15px 0;
+      overflow-x: auto;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .code-block .comment {
+      color: #68d391;
+    }
+
+    .code-block .keyword {
+      color: #63b3ed;
+    }
+
+    .code-block .string {
+      color: #f6ad55;
+    }
+
+    .code-block .number {
+      color: #fc8181;
+    }
+
+    .example-title {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      color: #555;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: #27ae60;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .toc {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .toc h3 {
+      margin-bottom: 15px;
       color: #2c3e50;
     }
 
-    .layout-info code {
-      background: #d5e8f0;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
+    .toc ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .toc li {
+      padding: 5px 0;
+    }
+
+    .toc a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .color-scheme-demo {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    .color-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .color-chip .swatch {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .color-chip .name {
+      font-size: 0.7rem;
+      color: #666;
     }
 
     @media (max-width: 768px) {
@@ -253,7 +384,11 @@
       }
       
       .chart-container {
-        height: 280px;
+        height: 250px;
+      }
+
+      .chart-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -261,22 +396,77 @@
 <body>
   <div class="container">
     <header>
-      <h1>📊 CVP Analysis Treemap <span class="version-badge">v0.2.0</span></h1>
+      <h1>📊 CVP Analysis Treemap <span class="version-badge">v0.3.0</span></h1>
       <p>面積ブロック図形式のCVP（損益分岐点）分析グラフ</p>
-      <div class="trademark-notice">
-        ⚠️ 本ライブラリは一般的なCVP分析（Cost-Volume-Profit Analysis）の実装です。
-        STRAC®はマネジメント・カレッジ株式会社の登録商標です。
+      <div class="notice">
+        ℹ️ 本ライブラリは一般的なCVP分析（Cost-Volume-Profit Analysis）の実装です。
       </div>
     </header>
 
-    <section class="chart-section">
-      <h2>🎯 CVP分析グラフ（Treemap形式）</h2>
+    <!-- 目次 -->
+    <nav class="toc">
+      <h3>📑 目次</h3>
+      <ul>
+        <li><a href="#example-basic">1. 基本的な使い方</a></li>
+        <li><a href="#example-interactive">2. インタラクティブなデモ</a></li>
+        <li><a href="#example-profit">3. 黒字のケース</a></li>
+        <li><a href="#example-loss">4. 赤字のケース</a></li>
+        <li><a href="#example-comparison">5. 複数期間の比較</a></li>
+        <li><a href="#example-colors">6. カラースキーム</a></li>
+        <li><a href="#api-reference">7. API リファレンス</a></li>
+      </ul>
+    </nav>
 
-      <div class="layout-info">
-        <strong>レイアウト構造:</strong> 左に<code>売上高</code>、右上に<code>変動費</code>、
-        右下に<code>粗利</code>（限界利益）とその内訳（<code>固定費</code>・<code>利益</code>）を表示
-      </div>
+    <!-- 1. 基本的な使い方 -->
+    <section id="example-basic" class="chart-section">
+      <h2>📘 1. 基本的な使い方</h2>
       
+      <p>最もシンプルなCVP Treemapチャートの作成方法です。売上高、変動費、固定費の3つの値を入力するだけでグラフが生成されます。</p>
+
+      <div class="chart-container" id="basicChartContainer">
+        <canvas id="basicChart"></canvas>
+      </div>
+
+      <h3>コード例</h3>
+      <div class="code-block">
+<span class="keyword">import</span> { Chart } <span class="keyword">from</span> <span class="string">'chart.js'</span>;
+<span class="keyword">import</span> {
+  ContributionMarginTreemapPlugin,
+  createTreemapChartConfig,
+} <span class="keyword">from</span> <span class="string">'@contribution-margin/chartjs'</span>;
+
+<span class="comment">// プラグインを登録</span>
+Chart.register(ContributionMarginTreemapPlugin);
+
+<span class="comment">// チャート設定を作成</span>
+<span class="keyword">const</span> config = createTreemapChartConfig({
+  input: {
+    label: <span class="string">'2025年12月'</span>,
+    sales: <span class="number">10_000_000</span>,        <span class="comment">// 売上高: 1,000万円</span>
+    variableCosts: <span class="number">4_000_000</span>, <span class="comment">// 変動費: 400万円</span>
+    fixedCosts: <span class="number">3_000_000</span>,    <span class="comment">// 固定費: 300万円</span>
+  },
+  title: <span class="string">'基本的なCVPグラフ'</span>,
+});
+
+<span class="comment">// チャートを作成</span>
+<span class="keyword">new</span> Chart(canvas, config);
+      </div>
+
+      <h3>特徴</h3>
+      <ul class="feature-list">
+        <li>3つの入力値（売上高・変動費・固定費）だけで完成</li>
+        <li>自動的に限界利益と経営利益を計算</li>
+        <li>面積比率で利益構造を視覚化</li>
+      </ul>
+    </section>
+
+    <!-- 2. インタラクティブなデモ -->
+    <section id="example-interactive" class="chart-section">
+      <h2>🎯 2. インタラクティブなデモ</h2>
+      
+      <p>値を変更してグラフの変化を確認できます。リアルタイムで指標が再計算されます。</p>
+
       <div class="data-input">
         <h3>入力データ（千円単位）</h3>
         <div class="input-grid">
@@ -296,8 +486,8 @@
         <button class="btn" onclick="updateChart()">📈 グラフ更新</button>
       </div>
 
-      <div class="chart-container">
-        <canvas id="cvpChart"></canvas>
+      <div class="chart-container large" id="interactiveChartContainer">
+        <canvas id="interactiveChart"></canvas>
       </div>
 
       <div class="legend">
@@ -330,11 +520,270 @@
       <div class="metrics-panel" id="metricsPanel">
         <!-- Metrics will be inserted here -->
       </div>
+
+      <h3>コード例（動的更新）</h3>
+      <div class="code-block">
+<span class="comment">// チャートを更新する関数</span>
+<span class="keyword">function</span> updateChart(chart, newData) {
+  <span class="keyword">const</span> pluginOptions = chart.options.plugins?.contributionMarginTreemap;
+  <span class="keyword">if</span> (pluginOptions) {
+    pluginOptions.input = newData;
+  }
+  chart.$cvpTreemap = <span class="keyword">undefined</span>; <span class="comment">// キャッシュをクリア</span>
+  chart.update();
+}
+      </div>
+    </section>
+
+    <!-- 3. 黒字のケース -->
+    <section id="example-profit" class="chart-section">
+      <h2>💰 3. 黒字のケース</h2>
+      
+      <p>経営利益が出ている（黒字）場合の表示例です。利益部分は濃い緑色で表示されます。</p>
+
+      <div class="chart-grid">
+        <div>
+          <span class="example-title">高収益パターン</span>
+          <div class="chart-container" id="profitChart1Container">
+            <canvas id="profitChart1"></canvas>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: #666;">
+            売上1,000万 / 変動費300万 / 固定費300万<br>
+            <strong style="color: #27ae60;">利益: 400万円（40%）</strong>
+          </p>
+        </div>
+        <div>
+          <span class="example-title">標準パターン</span>
+          <div class="chart-container" id="profitChart2Container">
+            <canvas id="profitChart2"></canvas>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: #666;">
+            売上1,000万 / 変動費500万 / 固定費300万<br>
+            <strong style="color: #27ae60;">利益: 200万円（20%）</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 赤字のケース -->
+    <section id="example-loss" class="chart-section">
+      <h2>📉 4. 赤字のケース</h2>
+      
+      <p>経営損失（赤字）の場合の表示例です。損失部分は赤色で表示され、固定費領域の下に突き出します。</p>
+
+      <div class="chart-grid">
+        <div>
+          <span class="example-title">軽度の赤字</span>
+          <div class="chart-container" id="lossChart1Container">
+            <canvas id="lossChart1"></canvas>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: #666;">
+            売上1,000万 / 変動費500万 / 固定費600万<br>
+            <strong style="color: #e74c3c;">損失: -100万円</strong>
+          </p>
+        </div>
+        <div>
+          <span class="example-title">重度の赤字</span>
+          <div class="chart-container" id="lossChart2Container">
+            <canvas id="lossChart2"></canvas>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: #666;">
+            売上1,000万 / 変動費600万 / 固定費600万<br>
+            <strong style="color: #e74c3c;">損失: -200万円</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 複数期間の比較 -->
+    <section id="example-comparison" class="chart-section">
+      <h2>📅 5. 複数期間の比較</h2>
+      
+      <p>月次や四半期など、複数期間のCVPグラフを並べて比較できます。</p>
+
+      <div class="chart-grid">
+        <div>
+          <span class="example-title">10月</span>
+          <div class="chart-container small" id="monthChart1Container">
+            <canvas id="monthChart1"></canvas>
+          </div>
+        </div>
+        <div>
+          <span class="example-title">11月</span>
+          <div class="chart-container small" id="monthChart2Container">
+            <canvas id="monthChart2"></canvas>
+          </div>
+        </div>
+        <div>
+          <span class="example-title">12月</span>
+          <div class="chart-container small" id="monthChart3Container">
+            <canvas id="monthChart3"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <h3>コード例（複数チャート）</h3>
+      <div class="code-block">
+<span class="keyword">const</span> monthlyData = [
+  { label: <span class="string">'10月'</span>, sales: <span class="number">10_000_000</span>, variableCosts: <span class="number">5_000_000</span>, fixedCosts: <span class="number">3_000_000</span> },
+  { label: <span class="string">'11月'</span>, sales: <span class="number">9_000_000</span>, variableCosts: <span class="number">4_500_000</span>, fixedCosts: <span class="number">3_000_000</span> },
+  { label: <span class="string">'12月'</span>, sales: <span class="number">12_000_000</span>, variableCosts: <span class="number">6_000_000</span>, fixedCosts: <span class="number">3_000_000</span> },
+];
+
+monthlyData.forEach((data, index) => {
+  <span class="keyword">const</span> config = createTreemapChartConfig({
+    input: data,
+    title: data.label,
+  });
+  <span class="keyword">new</span> Chart(canvases[index], config);
+});
+      </div>
+    </section>
+
+    <!-- 6. カラースキーム -->
+    <section id="example-colors" class="chart-section">
+      <h2>🎨 6. カラースキーム</h2>
+      
+      <p>組み込みのカラースキームを使用するか、カスタムカラーを設定できます。</p>
+
+      <h3>デフォルトカラー</h3>
+      <div class="color-scheme-demo">
+        <div class="color-chip">
+          <div class="swatch" style="background: #4A90E2;"></div>
+          <span class="name">売上高</span>
+        </div>
+        <div class="color-chip">
+          <div class="swatch" style="background: #F5A623;"></div>
+          <span class="name">変動費</span>
+        </div>
+        <div class="color-chip">
+          <div class="swatch" style="background: #7ED321;"></div>
+          <span class="name">限界利益</span>
+        </div>
+        <div class="color-chip">
+          <div class="swatch" style="background: #9B9B9B;"></div>
+          <span class="name">固定費</span>
+        </div>
+        <div class="color-chip">
+          <div class="swatch" style="background: #417505;"></div>
+          <span class="name">利益</span>
+        </div>
+        <div class="color-chip">
+          <div class="swatch" style="background: #D0021B;"></div>
+          <span class="name">損失</span>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div>
+          <span class="example-title">デフォルト</span>
+          <div class="chart-container small" id="colorChart1Container">
+            <canvas id="colorChart1"></canvas>
+          </div>
+        </div>
+        <div>
+          <span class="example-title">パステル</span>
+          <div class="chart-container small" id="colorChart2Container">
+            <canvas id="colorChart2"></canvas>
+          </div>
+        </div>
+        <div>
+          <span class="example-title">モノクローム</span>
+          <div class="chart-container small" id="colorChart3Container">
+            <canvas id="colorChart3"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <h3>コード例（カラースキーム指定）</h3>
+      <div class="code-block">
+<span class="comment">// 組み込みスキーム</span>
+<span class="keyword">const</span> config = createTreemapChartConfig({
+  input: { <span class="comment">/* ... */</span> },
+  display: {
+    colorScheme: <span class="string">'pastel'</span>, <span class="comment">// 'default' | 'pastel' | 'vivid' | 'monochrome' | 'colorblind'</span>
+  },
+});
+
+<span class="comment">// カスタムカラー</span>
+<span class="keyword">const</span> configCustom = createTreemapChartConfig({
+  input: { <span class="comment">/* ... */</span> },
+  display: {
+    customColors: {
+      sales: <span class="string">'#2E86AB'</span>,
+      variable: <span class="string">'#E94F37'</span>,
+      contribution: <span class="string">'#44AF69'</span>,
+      fixed: <span class="string">'#6B717E'</span>,
+      profit: <span class="string">'#138A36'</span>,
+      loss: <span class="string">'#D62828'</span>,
+    },
+  },
+});
+      </div>
+    </section>
+
+    <!-- 7. API リファレンス -->
+    <section id="api-reference" class="chart-section">
+      <h2>📚 7. API リファレンス</h2>
+
+      <h3>インストール</h3>
+      <div class="code-block">
+npm install @contribution-margin/chartjs chart.js
+<span class="comment"># または</span>
+pnpm add @contribution-margin/chartjs chart.js
+      </div>
+
+      <h3>CVPCalculator - 指標計算</h3>
+      <div class="code-block">
+<span class="keyword">import</span> { CVPCalculator, ValueFormatter } <span class="keyword">from</span> <span class="string">'@contribution-margin/chartjs'</span>;
+
+<span class="keyword">const</span> calculator = <span class="keyword">new</span> CVPCalculator();
+<span class="keyword">const</span> result = calculator.calculateResult({
+  sales: <span class="number">12_500_000</span>,
+  variableCosts: <span class="number">6_000_000</span>,
+  fixedCosts: <span class="number">3_700_000</span>,
+});
+
+console.log(result.calculated.contributionMargin);    <span class="comment">// 6,500,000（限界利益）</span>
+console.log(result.calculated.contributionMarginRatio); <span class="comment">// 0.52（52%）</span>
+console.log(result.calculated.breakEvenPoint);        <span class="comment">// 7,115,385（損益分岐点）</span>
+console.log(result.calculated.operatingProfit);       <span class="comment">// 2,800,000（経営利益）</span>
+console.log(result.calculated.safetyMarginRatio);     <span class="comment">// 0.431（43.1%）</span>
+      </div>
+
+      <h3>ValueFormatter - 値のフォーマット</h3>
+      <div class="code-block">
+<span class="keyword">const</span> formatter = <span class="keyword">new</span> ValueFormatter({
+  unitMode: <span class="string">'thousand'</span>,  <span class="comment">// 'raw' | 'thousand' | 'million' | 'billion'</span>
+  locale: <span class="string">'ja-JP'</span>,
+  currencySymbol: <span class="string">'¥'</span>,
+});
+
+formatter.format(<span class="number">6_500_000</span>);          <span class="comment">// "¥6,500千円"</span>
+formatter.formatPercentage(<span class="number">0.52</span>);    <span class="comment">// "52.0%"</span>
+      </div>
+
+      <h3>DisplayOptions - 表示オプション</h3>
+      <div class="code-block">
+<span class="keyword">const</span> config = createTreemapChartConfig({
+  input: { <span class="comment">/* ... */</span> },
+  display: {
+    showValues: <span class="keyword">true</span>,          <span class="comment">// 金額を表示</span>
+    showLabels: <span class="keyword">true</span>,          <span class="comment">// ラベルを表示</span>
+    showPercentages: <span class="keyword">false</span>,    <span class="comment">// パーセンテージを表示</span>
+    unitMode: <span class="string">'thousand'</span>,      <span class="comment">// 単位モード</span>
+    locale: <span class="string">'ja-JP'</span>,           <span class="comment">// ロケール</span>
+    currencySymbol: <span class="string">'¥'</span>,       <span class="comment">// 通貨記号</span>
+    colorScheme: <span class="string">'default'</span>,    <span class="comment">// カラースキーム</span>
+    lossDisplayMode: <span class="string">'negative-bar'</span>, <span class="comment">// 損失表示モード</span>
+  },
+});
+      </div>
     </section>
 
     <footer>
       <p>
-        <strong>@contribution-margin/chartjs</strong> v0.2.0 |
+        <strong>@contribution-margin/chartjs</strong> v0.3.0 |
         <a href="https://github.com/bobeec/contribution-margin-chart" target="_blank">GitHub</a>
       </p>
       <p>MIT License | Built with Chart.js | Treemap Layout</p>

@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-12-23
+
+### Changed
+
+#### @contribution-margin/chartjs v0.3.0
+
+- **BEP Line disabled by default**: Treemap形式ではBEP縦線をデフォルトで非表示に変更
+  - `showBEPLine: false` がデフォルト値に
+  - 必要な場合は `showBEPLine: true` で明示的に有効化可能
+
+- **Demo page completely redesigned**: デモページを大幅に拡充
+  - 基本的な使い方のサンプル
+  - インタラクティブなデモ（値の動的変更）
+  - 黒字パターンのサンプル（高収益・標準）
+  - 赤字パターンのサンプル（軽度・重度）
+  - 複数期間比較のサンプル
+  - カラースキームのサンプル（デフォルト・パステル・モノクローム）
+  - APIリファレンスとコード例
+
+### Removed
+
+- **Trademark notice simplified**: STRAC®商標注記を簡略化
+  - 「本ライブラリは一般的なCVP分析の実装です」のみを表示
+  - 第三者商標への言及を削除
+
 ## [0.2.0] - 2025-12-23
 
 ### Added
@@ -137,6 +162,7 @@ This is the first public release of the Contribution Margin Chart library.
 
 **Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
 
-[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.0
 [0.2.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.2.0
 [0.1.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.1.0

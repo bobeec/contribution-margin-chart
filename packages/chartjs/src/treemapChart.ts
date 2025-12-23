@@ -61,13 +61,14 @@ export function createTreemapChartConfig(options: CreateTreemapChartOptions): Ch
         legend: { display: false },
         tooltip: { enabled: false },
         // Treemap plugin options
+        // Note: BEP line is disabled by default for Treemap layout
         contributionMarginTreemap: {
           input,
           display: {
             ...display,
             showValues: display?.showValues ?? true,
             showLabels: display?.showLabels ?? true,
-            showBEPLine: display?.showBEPLine ?? true,
+            showBEPLine: display?.showBEPLine ?? false, // Treemapでは通常BEPラインは不要
           },
           metrics,
         } as ContributionMarginPluginOptions,

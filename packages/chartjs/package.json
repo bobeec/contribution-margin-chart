@@ -1,6 +1,6 @@
 {
   "name": "@contribution-margin/chartjs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Chart.js plugin for CVP (Cost-Volume-Profit) analysis charts - Horizontal stacked bar charts for profit structure visualization",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

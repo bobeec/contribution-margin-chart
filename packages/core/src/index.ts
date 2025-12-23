@@ -2,10 +2,8 @@
  * @contribution-margin/core
  * Core calculation and layout engine for CVP (Cost-Volume-Profit) analysis charts
  *
- * ⚠️ Trademark Notice:
  * This library implements general CVP analysis (Cost-Volume-Profit Analysis)
  * and is not affiliated with any specific trademarked accounting methodology.
- * STRAC® is a registered trademark of Management College Co., Ltd.
  *
  * @packageDocumentation
  */
