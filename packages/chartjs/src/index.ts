@@ -10,15 +10,20 @@
  * @packageDocumentation
  */
 
-// Plugin
+// Plugin - Horizontal Stacked Bar (Original)
 export { ContributionMarginPlugin, registerContributionMarginPlugin } from './plugin';
+
+// Plugin - Treemap (v0.2.0)
+export { ContributionMarginTreemapPlugin, registerTreemapPlugin } from './treemapPlugin';
 
 // Chart factory functions
 export { createCVPChart, createCVPChartConfig, updateCVPChart } from './chart';
+export { createTreemapChart, createTreemapChartConfig } from './treemapChart';
 export type { CreateCVPChartOptions } from './chart';
 
 // Renderer (for advanced usage)
 export { CVPRenderer } from './renderer';
+export { TreemapRenderer } from './TreemapRenderer';
 
 // Types
 export type {
@@ -50,6 +55,7 @@ export {
   CVPCalculator,
   CVPValidator,
   LayoutEngine,
+  TreemapLayoutEngine,
   ValueFormatter,
   DEFAULT_COLORS,
   SAMPLE_DATA,
@@ -57,3 +63,6 @@ export {
   validateCVP,
   formatValue,
 } from '@contribution-margin/core';
+
+// Re-export treemap types
+export type { TreemapBlock, TreemapLayoutOutput } from '@contribution-margin/core';

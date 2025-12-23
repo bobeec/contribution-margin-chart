@@ -20,7 +20,8 @@ export { CVPCalculator } from './calculator';
 export { CVPValidator } from './validator';
 
 // Layout - Segment and annotation generation
-export { LayoutEngine } from './layout';
+export { LayoutEngine, TreemapLayoutEngine } from './layout';
+export type { TreemapBlock, TreemapLayoutOutput } from './layout';
 
 // Formatter - Value formatting utilities
 export { ValueFormatter, type FormatOptions } from './formatter';

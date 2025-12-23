@@ -4,3 +4,5 @@
  */
 
 export { LayoutEngine } from './LayoutEngine';
+export { TreemapLayoutEngine } from './TreemapLayoutEngine';
+export type { TreemapBlock, TreemapLayoutOutput } from './TreemapLayoutEngine';

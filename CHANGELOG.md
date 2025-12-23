@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-12-23
+
+### Added
+
+#### @contribution-margin/core v0.2.0
+
+- **TreemapLayoutEngine**: New layout engine for treemap-style CVP visualization
+  - Generates area-based blocks representing sales structure
+  - Supports nested layout: Sales (left) → Variable Costs, Contribution Margin, Fixed Costs, Profit (right)
+  - Normalized coordinates (0-1) for flexible rendering
+  - BEP line annotation support
+
+- **TreemapBlock type**: New data structure for treemap visualization
+  - Position (x, y), dimensions (width, height)
+  - Color, text color, border styling
+  - Value and percentage information
+
+#### @contribution-margin/chartjs v0.2.0
+
+- **ContributionMarginTreemapPlugin**: Chart.js plugin for treemap CVP charts
+  - Renders area-based visualization of profit structure
+  - Auto-hides Chart.js default axes for treemap mode
+  - Supports BEP line annotations
+
+- **TreemapRenderer**: Canvas renderer for treemap blocks
+  - Dynamic font sizing based on block dimensions
+  - Automatic text color contrast adjustment
+  - Value and percentage label rendering
+  - BEP line rendering with labels
+
+- **createTreemapChartConfig**: Factory function for treemap chart configuration
+  - Simple API matching existing CVP chart creation
+
+### Changed
+
+- Demo application updated to use Treemap layout by default
+- Updated index.html with Treemap layout information
+
 ## [0.1.0] - 2025-12-23
 
 ### Added
@@ -99,5 +137,6 @@ This is the first public release of the Contribution Margin Chart library.
 
 **Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
 
-[Unreleased]: https://github.com/contribution-margin/contribution-margin-chart/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/contribution-margin/contribution-margin-chart/releases/tag/v0.1.0
+[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.2.0
+[0.1.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.1.0

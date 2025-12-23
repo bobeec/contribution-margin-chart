@@ -1,6 +1,7 @@
 /**
- * CVP Analysis Chart Demo
+ * CVP Analysis Chart Demo - v0.2.0
  * Interactive demonstration of the @contribution-margin/chartjs plugin
+ * Now featuring Treemap layout!
  */
 
 import {
@@ -15,8 +16,8 @@ import {
 } from 'chart.js';
 
 import {
-  ContributionMarginPlugin,
-  createCVPChartConfig,
+  ContributionMarginTreemapPlugin,
+  createTreemapChartConfig,
   CVPCalculator,
   ValueFormatter,
   SAMPLE_DATA,
@@ -32,12 +33,11 @@ Chart.register(
   Title,
   Tooltip,
   Legend,
-  ContributionMarginPlugin
+  ContributionMarginTreemapPlugin
 );
 
 // Global chart instance
 let mainChart: Chart<'bar'> | null = null;
-let multiPeriodChart: Chart<'bar'> | null = null;
 
 // Formatter for displaying values
 const formatter = new ValueFormatter({
@@ -47,7 +47,7 @@ const formatter = new ValueFormatter({
 });
 
 /**
- * Initialize the main CVP chart
+ * Initialize the main CVP Treemap chart
  */
 function initMainChart(): void {
   const canvas = document.getElementById('cvpChart') as HTMLCanvasElement;
@@ -57,52 +57,31 @@ function initMainChart(): void {
   if (!ctx) return;
 
   const input = getInputData();
-  const config = createCVPChartConfig({
+  const config = createTreemapChartConfig({
     input,
-    title: 'CVP Analysis - Profit Structure',
+    title: '月次進捗',
     display: {
       showBEPLine: true,
       showValues: true,
       showLabels: true,
+      showPercentages: false,
       lossDisplayMode: 'negative-bar',
       unitMode: 'thousand',
       locale: 'ja-JP',
+      currencySymbol: '¥',
     },
-    events: {
-      onSegmentClick: (segment, event, cvpResult) => {
-        console.log('Segment clicked:', segment);
-        alert(`${segment.label}: ${formatter.format(segment.value)}`);
+    metrics: {
+      display: {
+        contributionMarginRatio: true,
+        breakEvenPoint: true,
+        safetyMargin: true,
       },
+      position: 'bottom',
     },
   });
 
   mainChart = new Chart(ctx, config);
   updateMetricsPanel(input);
-}
-
-/**
- * Initialize multi-period comparison chart
- */
-function initMultiPeriodChart(): void {
-  const canvas = document.getElementById('multiPeriodChart') as HTMLCanvasElement;
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const multiPeriodData = SAMPLE_DATA.multiPeriod;
-  const config = createCVPChartConfig({
-    input: multiPeriodData,
-    title: 'Multi-Period CVP Comparison',
-    display: {
-      showBEPLine: true,
-      showValues: true,
-      lossDisplayMode: 'negative-bar',
-      unitMode: 'thousand',
-    },
-  });
-
-  multiPeriodChart = new Chart(ctx, config);
 }
 
 /**
@@ -114,10 +93,10 @@ function getInputData(): CVPInput {
   const fixedInput = document.getElementById('fixedCosts') as HTMLInputElement;
 
   return {
-    label: 'Current Period',
-    sales: (parseFloat(salesInput?.value || '10000') || 0) * 1000, // Convert to yen
-    variableCosts: (parseFloat(variableInput?.value || '6200') || 0) * 1000,
-    fixedCosts: (parseFloat(fixedInput?.value || '3100') || 0) * 1000,
+    label: '2025年12月',
+    sales: (parseFloat(salesInput?.value || '12500') || 0) * 1000,
+    variableCosts: (parseFloat(variableInput?.value || '6000') || 0) * 1000,
+    fixedCosts: (parseFloat(fixedInput?.value || '3700') || 0) * 1000,
   };
 }
 
@@ -130,13 +109,13 @@ function updateChart(): void {
   const input = getInputData();
 
   // Update plugin options
-  const pluginOptions = mainChart.options.plugins?.contributionMargin as any;
+  const pluginOptions = (mainChart.options.plugins as any)?.contributionMarginTreemap;
   if (pluginOptions) {
     pluginOptions.input = input;
   }
 
   // Clear cached data
-  (mainChart as any).$cvp = undefined;
+  (mainChart as any).$cvpTreemap = undefined;
 
   // Update chart
   mainChart.update();
@@ -196,5 +175,4 @@ function updateMetricsPanel(input: CVPInput): void {
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initMainChart();
-  initMultiPeriodChart();
 });
