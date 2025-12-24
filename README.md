@@ -8,275 +8,400 @@
 
 **JavaScript library for CVP (Cost-Volume-Profit) analysis visualization**
 
-[Features](#features) • [Installation](#installation) • [Quick Start](#quick-start) • [API Reference](#api-reference) • [Examples](#examples)
+**CVP分析（損益分岐点分析）を可視化するJavaScriptライブラリ**
+
+[English](#english) | [日本語](#日本語)
 
 </div>
 
 ---
 
-## ⚠️ Important Notice Regarding Trademarks
+# English
 
-This library is an open-source implementation of general **CVP analysis (Cost-Volume-Profit Analysis)** and **break-even point visualization** techniques commonly used in management accounting.
+## Overview
 
-- **STRAC®** is a registered trademark of Management College Co., Ltd. This library is not affiliated with or endorsed by that company.
-- This library is based on standard accounting practices and is referred to using general terminology such as "CVP Analysis Chart", "Contribution Margin Chart", and "Break-Even Point Chart".
-
----
+A TypeScript library for creating CVP (Cost-Volume-Profit) analysis charts. Automatically calculates contribution margin, break-even point, and safety margin, then visualizes the profit structure using Chart.js.
 
 ## Features
 
-- 📊 **Horizontal Stacked Bar Chart** - Visualize profit structure at a glance
-- 🔢 **Automatic Calculation** - Contribution margin ratio, BEP, safety margin, and more
-- ⚠️ **Built-in Validation** - Warnings for anomalies (negative margin, variable costs exceeding sales)
-- 🎨 **Customizable Annotations** - BEP lines, contribution margin ellipses, arrows
-- 🔌 **Chart Library Agnostic Core** - Use with Chart.js, ECharts, D3 (more adapters coming)
-- 📦 **TypeScript First** - Full type definitions included
-- 🌏 **i18n Support** - Japanese and English labels, locale-aware formatting
-- ♿ **Accessibility** - Color schemes for colorblind users
-
-## Packages
-
-| Package | Description | Version |
-|---------|-------------|---------|
-| `@contribution-margin/core` | Core calculation and layout engine | ![npm](https://img.shields.io/npm/v/@contribution-margin/core.svg) |
-| `@contribution-margin/chartjs` | Chart.js plugin | ![npm](https://img.shields.io/npm/v/@contribution-margin/chartjs.svg) |
+| Feature | Description |
+|---------|-------------|
+| 📊 **Treemap Chart** | Visualize profit structure with area-based blocks |
+| 🔢 **Auto Calculation** | Contribution margin, BEP, safety margin, and more |
+| ⚠️ **Validation** | Warnings for anomalies (negative margin, etc.) |
+| 🎨 **Color Schemes** | Default, pastel, monochrome, colorblind-friendly |
+| 📉 **Loss Display Modes** | Choose how to display losses (extend down or separate block) |
+| 📦 **TypeScript** | Full type definitions included |
+| 🌏 **i18n** | Japanese and English labels |
 
 ## Installation
 
 ```bash
-# Core package only
-npm install @contribution-margin/core
-
-# With Chart.js plugin
 npm install @contribution-margin/chartjs chart.js
-```
-
-Using pnpm:
-```bash
-pnpm add @contribution-margin/core @contribution-margin/chartjs chart.js
-```
-
-Using yarn:
-```bash
-yarn add @contribution-margin/core @contribution-margin/chartjs chart.js
+# or
+pnpm add @contribution-margin/chartjs chart.js
+# or
+yarn add @contribution-margin/chartjs chart.js
 ```
 
 ## Quick Start
 
-### Basic Calculation
-
-```typescript
-import { calculateCVP } from '@contribution-margin/core';
-
-const result = calculateCVP({
-  sales: 10_000_000,      // 売上高: 10,000千円
-  variableCosts: 6_200_000, // 変動費: 6,200千円
-  fixedCosts: 3_100_000,    // 固定費: 3,100千円
-});
-
-console.log(result.calculated.contributionMargin);    // 3,800,000 (限界利益)
-console.log(result.calculated.contributionMarginRatio); // 0.38 (38%)
-console.log(result.calculated.breakEvenPoint);        // 8,157,894.74 (損益分岐点)
-console.log(result.calculated.operatingProfit);       // 700,000 (経営利益)
-```
-
-### Chart.js Integration
+### Basic Usage
 
 ```typescript
 import { Chart } from 'chart.js';
-import { ContributionMarginPlugin, createCVPChartConfig } from '@contribution-margin/chartjs';
+import {
+  ContributionMarginTreemapPlugin,
+  createTreemapChartConfig,
+} from '@contribution-margin/chartjs';
 
 // Register the plugin
-Chart.register(ContributionMarginPlugin);
+Chart.register(ContributionMarginTreemapPlugin);
 
 // Create chart configuration
-const config = createCVPChartConfig({
+const config = createTreemapChartConfig({
   input: {
-    label: '2025-Q4',
-    sales: 10_000_000,
-    variableCosts: 6_200_000,
-    fixedCosts: 3_100_000,
+    label: 'December 2025',
+    sales: 10_000_000,        // Sales: ¥10,000,000
+    variableCosts: 4_000_000, // Variable Costs: ¥4,000,000
+    fixedCosts: 3_000_000,    // Fixed Costs: ¥3,000,000
   },
-  display: {
-    showBEPLine: true,
-    showValues: true,
-    lossDisplayMode: 'negative-bar',
-    unitMode: 'thousand',
-    locale: 'ja-JP',
-  },
+  title: 'CVP Analysis',
 });
 
 // Create the chart
-const chart = new Chart(ctx, config);
+new Chart(canvas, config);
 ```
 
-### Multi-Period Comparison
+### Calculate Metrics
 
 ```typescript
-import { createCVPChartConfig } from '@contribution-margin/chartjs';
+import { CVPCalculator, ValueFormatter } from '@contribution-margin/chartjs';
 
-const config = createCVPChartConfig({
-  input: [
-    { label: '2025-10', sales: 10_000_000, variableCosts: 6_200_000, fixedCosts: 3_100_000 },
-    { label: '2025-11', sales: 9_500_000, variableCosts: 5_800_000, fixedCosts: 3_300_000 },
-    { label: '2025-12', sales: 8_000_000, variableCosts: 5_600_000, fixedCosts: 3_400_000 },
-    { label: '2026-01', sales: 11_200_000, variableCosts: 6_700_000, fixedCosts: 3_200_000 },
-  ],
-  title: 'Multi-Period CVP Analysis',
+const calculator = new CVPCalculator();
+const result = calculator.calculateResult({
+  sales: 10_000_000,
+  variableCosts: 4_000_000,
+  fixedCosts: 3_000_000,
+});
+
+console.log(result.calculated.contributionMargin);    // 6,000,000 (Contribution Margin)
+console.log(result.calculated.contributionMarginRatio); // 0.6 (60%)
+console.log(result.calculated.breakEvenPoint);        // 5,000,000 (Break-Even Point)
+console.log(result.calculated.operatingProfit);       // 3,000,000 (Operating Profit)
+console.log(result.calculated.safetyMarginRatio);     // 0.5 (50%)
+```
+
+### Loss Display Modes
+
+When operating at a loss, you can choose how to display it:
+
+```typescript
+// Mode 1: Loss extends downward (default)
+const config1 = createTreemapChartConfig({
+  input: { sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 6_000_000 },
+  display: {
+    lossDisplayMode: 'negative-bar', // Loss extends below the chart
+  },
+});
+
+// Mode 2: Loss as separate block
+const config2 = createTreemapChartConfig({
+  input: { sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 6_000_000 },
+  display: {
+    lossDisplayMode: 'separate', // Loss shown as separate block on right
+  },
+});
+```
+
+### Display Options
+
+```typescript
+const config = createTreemapChartConfig({
+  input: { /* ... */ },
+  display: {
+    showValues: true,           // Show monetary values
+    showLabels: true,           // Show block labels
+    showPercentages: false,     // Show percentages
+    unitMode: 'thousand',       // 'raw' | 'thousand' | 'million' | 'billion'
+    locale: 'en-US',            // Locale for formatting
+    currencySymbol: '$',        // Currency symbol
+    colorScheme: 'default',     // 'default' | 'pastel' | 'monochrome' | 'colorblind'
+    lossDisplayMode: 'negative-bar', // 'negative-bar' | 'separate'
+  },
 });
 ```
 
 ## Calculated Metrics
 
-| Metric | Japanese | Formula |
-|--------|----------|---------|
-| Contribution Margin | 限界利益 | Sales - Variable Costs |
-| Contribution Margin Ratio | 限界利益率 | CM ÷ Sales |
-| Operating Profit | 経営利益 | CM - Fixed Costs |
-| Break-Even Point | 損益分岐点 | Fixed Costs ÷ CM Ratio |
-| Safety Margin | 安全余裕額 | Sales - BEP |
-| Safety Margin Ratio | 安全余裕率 | Safety Margin ÷ Sales |
-| Variable Cost Ratio | 変動費率 | Variable Costs ÷ Sales |
-| Fixed Cost Ratio | 固定費率 | Fixed Costs ÷ Sales |
-| Labor Distribution Ratio | 労働分配率 | Labor Costs ÷ CM |
+| Metric | Formula |
+|--------|---------|
+| Contribution Margin | Sales - Variable Costs |
+| Contribution Margin Ratio | CM ÷ Sales |
+| Operating Profit | CM - Fixed Costs |
+| Break-Even Point | Fixed Costs ÷ CM Ratio |
+| Safety Margin | Sales - BEP |
+| Safety Margin Ratio | Safety Margin ÷ Sales |
 
-## Display Options
+## Chart Layout
 
-### Loss Display Modes
-
-| Mode | Description |
-|------|-------------|
-| `negative-bar` (default) | Shows loss as a red bar extending to the right |
-| `downward` | Shows loss extending downward from the bar |
-| `separate` | Shows loss as a separate block |
-
-### Color Schemes
-
-```typescript
-// Built-in schemes
-colorScheme: 'default' | 'pastel' | 'vivid' | 'monochrome' | 'colorblind'
-
-// Custom colors
-customColors: {
-  sales: '#4A90E2',       // Blue
-  variable: '#F5A623',    // Orange
-  contribution: '#7ED321', // Green
-  fixed: '#9B9B9B',       // Gray
-  profit: '#417505',      // Dark Green
-  loss: '#D0021B',        // Red
-}
+```
+┌─────────────────────────────────────────────────────┐
+│                      Sales                          │
+│  ┌───────────────┬─────────────────────────────┐   │
+│  │               │       Variable Costs        │   │
+│  │               ├─────────────────────────────┤   │
+│  │    Sales      │    Contribution Margin      │   │
+│  │               │  ┌───────────┬───────────┐  │   │
+│  │               │  │  Fixed    │  Profit   │  │   │
+│  │               │  │  Costs    │  (Loss)   │  │   │
+│  │               │  └───────────┴───────────┘  │   │
+│  └───────────────┴─────────────────────────────┘   │
+└─────────────────────────────────────────────────────┘
 ```
 
-### Unit Modes
+---
 
-| Mode | Japanese | Example |
-|------|----------|---------|
-| `raw` | 円 | ¥10,000,000 |
-| `thousand` (default) | 千円 | ¥10,000千円 |
-| `million` | 百万円 | ¥10百万円 |
-| `billion` | 億円 | ¥1億円 |
+# 日本語
 
-## Validation & Warnings
+## 概要
 
-The library automatically validates input and provides warnings:
+CVP分析（Cost-Volume-Profit Analysis：損益分岐点分析）のグラフを作成するTypeScriptライブラリです。限界利益、損益分岐点、安全余裕率などを自動計算し、Chart.jsを使って利益構造を可視化します。
+
+## 特徴
+
+| 機能 | 説明 |
+|------|------|
+| 📊 **Treemapチャート** | 面積ブロック図で利益構造を可視化 |
+| 🔢 **自動計算** | 限界利益、損益分岐点、安全余裕率などを自動計算 |
+| ⚠️ **バリデーション** | 異常値（負の限界利益など）を警告 |
+| 🎨 **カラースキーム** | デフォルト、パステル、モノクローム、色覚対応 |
+| 📉 **赤字表示モード** | 赤字の表示方法を選択可能（下に足が出る / 別ブロック） |
+| 📦 **TypeScript** | 完全な型定義を同梱 |
+| 🌏 **国際化対応** | 日本語・英語のラベル対応 |
+
+## インストール
+
+```bash
+npm install @contribution-margin/chartjs chart.js
+# または
+pnpm add @contribution-margin/chartjs chart.js
+# または
+yarn add @contribution-margin/chartjs chart.js
+```
+
+## クイックスタート
+
+### 基本的な使い方
 
 ```typescript
-import { validateCVP } from '@contribution-margin/core';
+import { Chart } from 'chart.js';
+import {
+  ContributionMarginTreemapPlugin,
+  createTreemapChartConfig,
+} from '@contribution-margin/chartjs';
 
-const result = validateCVP({
+// プラグインを登録
+Chart.register(ContributionMarginTreemapPlugin);
+
+// チャート設定を作成
+const config = createTreemapChartConfig({
+  input: {
+    label: '2025年12月',
+    sales: 10_000_000,        // 売上高: 1,000万円
+    variableCosts: 4_000_000, // 変動費: 400万円
+    fixedCosts: 3_000_000,    // 固定費: 300万円
+  },
+  title: 'CVP分析グラフ',
+});
+
+// チャートを作成
+new Chart(canvas, config);
+```
+
+### 指標を計算する
+
+```typescript
+import { CVPCalculator, ValueFormatter } from '@contribution-margin/chartjs';
+
+const calculator = new CVPCalculator();
+const result = calculator.calculateResult({
   sales: 10_000_000,
-  variableCosts: 12_000_000, // Exceeds sales!
+  variableCosts: 4_000_000,
   fixedCosts: 3_000_000,
 });
 
-// result.warnings includes:
-// - VARIABLE_EXCEEDS_SALES: "変動費が売上高以上です"
-// - NEGATIVE_CONTRIBUTION_MARGIN: "限界利益が負です"
+console.log(result.calculated.contributionMargin);    // 6,000,000（限界利益）
+console.log(result.calculated.contributionMarginRatio); // 0.6（60%）
+console.log(result.calculated.breakEvenPoint);        // 5,000,000（損益分岐点）
+console.log(result.calculated.operatingProfit);       // 3,000,000（経営利益）
+console.log(result.calculated.safetyMarginRatio);     // 0.5（50%）
 ```
 
-## API Reference
+### 赤字表示モード
 
-### Core Classes
+赤字（経営損失）の場合、表示方法を選択できます：
 
-#### `CVPCalculator`
 ```typescript
+// モード1: 下に足が出る（デフォルト）
+const config1 = createTreemapChartConfig({
+  input: { sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 6_000_000 },
+  display: {
+    lossDisplayMode: 'negative-bar', // グラフの下に赤字部分が突き出る
+  },
+});
+
+// モード2: 別ブロックで分離
+const config2 = createTreemapChartConfig({
+  input: { sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 6_000_000 },
+  display: {
+    lossDisplayMode: 'separate', // 右側に赤字部分を別ブロックで表示
+  },
+});
+```
+
+### 表示オプション
+
+```typescript
+const config = createTreemapChartConfig({
+  input: { /* ... */ },
+  display: {
+    showValues: true,           // 金額を表示
+    showLabels: true,           // ラベルを表示
+    showPercentages: false,     // パーセンテージを表示
+    unitMode: 'thousand',       // 'raw' | 'thousand' | 'million' | 'billion'
+    locale: 'ja-JP',            // ロケール
+    currencySymbol: '¥',        // 通貨記号
+    colorScheme: 'default',     // 'default' | 'pastel' | 'monochrome' | 'colorblind'
+    lossDisplayMode: 'negative-bar', // 'negative-bar' | 'separate'
+  },
+});
+```
+
+## 計算される指標
+
+| 指標 | 日本語 | 計算式 |
+|------|--------|--------|
+| Contribution Margin | 限界利益 | 売上高 - 変動費 |
+| Contribution Margin Ratio | 限界利益率 | 限界利益 ÷ 売上高 |
+| Operating Profit | 経営利益 | 限界利益 - 固定費 |
+| Break-Even Point | 損益分岐点 | 固定費 ÷ 限界利益率 |
+| Safety Margin | 安全余裕額 | 売上高 - 損益分岐点 |
+| Safety Margin Ratio | 安全余裕率 | 安全余裕額 ÷ 売上高 |
+
+## グラフのレイアウト
+
+```
+┌─────────────────────────────────────────────────────┐
+│                      売上高                         │
+│  ┌───────────────┬─────────────────────────────┐   │
+│  │               │         変動費              │   │
+│  │               ├─────────────────────────────┤   │
+│  │    売上高     │        限界利益             │   │
+│  │               │  ┌───────────┬───────────┐  │   │
+│  │               │  │  固定費   │  利益     │  │   │
+│  │               │  │           │ （損失）  │  │   │
+│  │               │  └───────────┴───────────┘  │   │
+│  └───────────────┴─────────────────────────────┘   │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Packages | パッケージ
+
+| Package | Description | 説明 |
+|---------|-------------|------|
+| `@contribution-margin/core` | Core calculation engine | コア計算エンジン |
+| `@contribution-margin/chartjs` | Chart.js plugin | Chart.jsプラグイン |
+
+## API Reference | APIリファレンス
+
+### CVPCalculator
+
+```typescript
+import { CVPCalculator } from '@contribution-margin/chartjs';
+
 const calculator = new CVPCalculator();
-const result = calculator.calculate(input);       // CVPCalculatedValues
-const fullResult = calculator.calculateResult(input); // CVPResult
+
+// Calculate all metrics | すべての指標を計算
+const result = calculator.calculateResult({
+  sales: 10_000_000,
+  variableCosts: 4_000_000,
+  fixedCosts: 3_000_000,
+});
+
+// Access calculated values | 計算結果にアクセス
+result.calculated.contributionMargin;    // 限界利益
+result.calculated.contributionMarginRatio; // 限界利益率
+result.calculated.breakEvenPoint;        // 損益分岐点
+result.calculated.operatingProfit;       // 経営利益
+result.calculated.safetyMargin;          // 安全余裕額
+result.calculated.safetyMarginRatio;     // 安全余裕率
+result.isProfitable;                     // 黒字かどうか
 ```
 
-#### `CVPValidator`
+### ValueFormatter
+
 ```typescript
+import { ValueFormatter } from '@contribution-margin/chartjs';
+
+const formatter = new ValueFormatter({
+  unitMode: 'thousand',  // 千円単位
+  locale: 'ja-JP',
+  currencySymbol: '¥',
+});
+
+formatter.format(10_000_000);       // "¥10,000千円"
+formatter.formatPercentage(0.52);   // "52.0%"
+```
+
+### CVPValidator
+
+```typescript
+import { CVPValidator } from '@contribution-margin/chartjs';
+
 const validator = new CVPValidator();
-const result = validator.validate(input); // ValidationResult
-const isValid = validator.isValid(input); // boolean
+const result = validator.validate({
+  sales: 10_000_000,
+  variableCosts: 12_000_000, // Exceeds sales! | 売上高を超えている！
+  fixedCosts: 3_000_000,
+});
+
+if (result.warnings.length > 0) {
+  console.warn(result.warnings);
+  // VARIABLE_EXCEEDS_SALES: "変動費が売上高以上です"
+}
 ```
 
-#### `LayoutEngine`
-```typescript
-const engine = new LayoutEngine(displayOptions);
-const layout = engine.generateLayout(input, calculated); // LayoutOutput
-```
-
-#### `ValueFormatter`
-```typescript
-const formatter = new ValueFormatter({ unitMode: 'thousand', locale: 'ja-JP' });
-formatter.format(10_000_000);        // "¥10,000千円"
-formatter.formatPercentage(0.38);    // "38.0%"
-```
-
-### Convenience Functions
-
-```typescript
-// Quick calculation
-const result = calculateCVP(input);
-
-// Quick validation
-const validation = validateCVP(input);
-
-// Quick layout generation
-const layout = generateLayout(input, options);
-
-// Quick formatting
-const formatted = formatValue(10_000_000);
-```
-
-## Development
+## Development | 開発
 
 ```bash
-# Install dependencies
+# Install dependencies | 依存関係をインストール
 pnpm install
 
-# Build all packages
+# Build all packages | 全パッケージをビルド
 pnpm build
 
-# Run tests
+# Run tests | テストを実行
 pnpm test
 
-# Run example app
-pnpm dev:example
+# Run example app | サンプルアプリを起動
+cd examples/basic-chartjs && pnpm dev
 ```
 
-## Roadmap
+## License | ライセンス
 
-- [x] Phase 0: Specification & Setup
-- [x] Phase 1: MVP (Core + Chart.js)
-- [ ] Phase 2: Annotations (ellipses, arrows)
-- [ ] Phase 3: Interactive features (simulation)
-- [ ] Phase 4: ECharts/D3 adapters
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a PR.
-
-## License
-
-MIT © [Contribution Margin Chart Contributors](LICENSE)
+MIT License
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for management accountants and consultants**
+**Made with ❤️ for management accountants**
+
+**管理会計に携わる皆さまのために ❤️**
+
+[GitHub](https://github.com/bobeec/contribution-margin-chart) | [npm](https://www.npmjs.com/package/@contribution-margin/chartjs)
 
 </div>

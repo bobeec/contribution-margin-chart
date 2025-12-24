@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2025-12-24
+
+### Added
+
+#### Documentation (English/Japanese Bilingual)
+
+- **README.md completely rewritten**: Bilingual documentation (English/Japanese)
+  - Clear separation with language anchors (#english, #日本語)
+  - Complete API reference in both languages
+  - Loss display mode documentation with examples
+  - Chart layout diagram
+
+- **Demo page bilingual redesign**: All content in English and Japanese
+  - Each section has EN/JA side-by-side explanations
+  - Code examples with bilingual comments
+  - 8 comprehensive sections covering all features
+
+#### Loss Display Mode Selection
+
+- **Interactive loss mode selection**: Users can now switch between loss display modes
+  - `negative-bar`: Loss extends downward from the fixed costs area
+  - `separate`: Loss shown as a separate block (cleaner for reports)
+  - New demo section (#5) dedicated to comparing both modes
+  - Dropdown selector in interactive demo
+
+### Changed
+
+- Demo page structure improved for better readability
+- All code examples now include bilingual comments
+- Color scheme section expanded with visual comparison
+
 ## [0.3.0] - 2025-12-23
 
 ### Changed
@@ -162,7 +193,8 @@ This is the first public release of the Contribution Margin Chart library.
 
 **Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
 
-[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.1
 [0.3.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.0
 [0.2.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.2.0
 [0.1.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.1.0

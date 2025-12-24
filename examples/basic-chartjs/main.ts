@@ -1,8 +1,10 @@
 /**
- * CVP Analysis Chart Demo - v0.3.0
+ * CVP Analysis Chart Demo - v0.3.1
  * Comprehensive demonstration of the @contribution-margin/chartjs library
+ * Bilingual (English/Japanese) demo with all features
  * 
- * This demo showcases various use cases for CVP (Cost-Volume-Profit) Treemap charts
+ * @contribution-margin/chartjs ライブラリの包括的デモ
+ * 英語・日本語併記、全機能デモ
  */
 
 import {
@@ -22,6 +24,7 @@ import {
   CVPCalculator,
   ValueFormatter,
   type CVPInput,
+  type DisplayOptions,
 } from '@contribution-margin/chartjs';
 
 // Register Chart.js components
@@ -40,20 +43,20 @@ Chart.register(
 // Configuration
 // ============================================================================
 
-// Formatter for displaying values
+// Formatter for displaying values (Japanese Yen in thousands)
 const formatter = new ValueFormatter({
   unitMode: 'thousand',
   locale: 'ja-JP',
   currencySymbol: '¥',
 });
 
-// Default display options (BEP line is OFF by default for Treemap)
-const defaultDisplayOptions = {
-  showBEPLine: false,  // Treemap形式ではBEPラインは不要
+// Default display options
+const defaultDisplayOptions: DisplayOptions = {
+  showBEPLine: false,
   showValues: true,
   showLabels: true,
   showPercentages: false,
-  unitMode: 'thousand' as const,
+  unitMode: 'thousand',
   locale: 'ja-JP',
   currencySymbol: '¥',
 };
@@ -74,12 +77,12 @@ function initBasicChart(): void {
 
   const config = createTreemapChartConfig({
     input: {
-      label: '基本例',
+      label: 'Basic | 基本例',
       sales: 10_000_000,
       variableCosts: 4_000_000,
       fixedCosts: 3_000_000,
     },
-    title: '基本的なCVPグラフ',
+    title: 'Basic CVP Chart | 基本的なCVPグラフ',
     display: defaultDisplayOptions,
   });
 
@@ -95,10 +98,15 @@ function initInteractiveChart(): void {
   if (!canvas) return;
 
   const input = getInputData();
+  const lossMode = getLossMode();
+  
   const config = createTreemapChartConfig({
     input,
-    title: '月次進捗',
-    display: defaultDisplayOptions,
+    title: 'Interactive Demo | インタラクティブデモ',
+    display: {
+      ...defaultDisplayOptions,
+      lossDisplayMode: lossMode,
+    },
   });
 
   interactiveChart = new Chart(canvas, config);
@@ -111,22 +119,32 @@ function getInputData(): CVPInput {
   const fixedInput = document.getElementById('fixedCosts') as HTMLInputElement;
 
   return {
-    label: '2025年12月',
+    label: 'Interactive | インタラクティブ',
     sales: (parseFloat(salesInput?.value || '12500') || 0) * 1000,
     variableCosts: (parseFloat(variableInput?.value || '6000') || 0) * 1000,
     fixedCosts: (parseFloat(fixedInput?.value || '3700') || 0) * 1000,
   };
 }
 
+function getLossMode(): 'negative-bar' | 'separate' {
+  const lossModeSelect = document.getElementById('lossMode') as HTMLSelectElement;
+  return (lossModeSelect?.value as 'negative-bar' | 'separate') || 'negative-bar';
+}
+
 function updateChart(): void {
   if (!interactiveChart) return;
 
   const input = getInputData();
+  const lossMode = getLossMode();
 
   // Update plugin options
   const pluginOptions = (interactiveChart.options.plugins as any)?.contributionMarginTreemap;
   if (pluginOptions) {
     pluginOptions.input = input;
+    pluginOptions.display = {
+      ...defaultDisplayOptions,
+      lossDisplayMode: lossMode,
+    };
   }
 
   // Clear cached data
@@ -151,31 +169,31 @@ function updateMetricsPanel(input: CVPInput): void {
 
   panel.innerHTML = `
     <div class="metric-card">
-      <div class="label">限界利益 (Contribution Margin)</div>
+      <div class="label">Contribution Margin | 限界利益</div>
       <div class="value">${formatter.format(calculated.contributionMargin)}</div>
       <div class="sub">${formatter.formatPercentage(calculated.contributionMarginRatio)}</div>
     </div>
     <div class="metric-card">
-      <div class="label">損益分岐点 (Break-Even Point)</div>
+      <div class="label">Break-Even Point | 損益分岐点</div>
       <div class="value">${calculated.breakEvenPoint ? formatter.format(calculated.breakEvenPoint) : '-'}</div>
       <div class="sub">${calculated.breakEvenRatio ? formatter.formatPercentage(calculated.breakEvenRatio) + ' of sales' : '-'}</div>
     </div>
     <div class="metric-card ${isProfitable ? 'profit' : 'loss'}">
-      <div class="label">${isProfitable ? '経営利益 (Profit)' : '損失 (Loss)'}</div>
+      <div class="label">${isProfitable ? 'Profit | 経営利益' : 'Loss | 損失'}</div>
       <div class="value">${formatter.format(calculated.operatingProfit)}</div>
       <div class="sub">${formatter.formatPercentage(calculated.operatingProfitRatio)}</div>
     </div>
     <div class="metric-card">
-      <div class="label">安全余裕額 (Safety Margin)</div>
+      <div class="label">Safety Margin | 安全余裕額</div>
       <div class="value">${calculated.safetyMargin ? formatter.format(calculated.safetyMargin) : '-'}</div>
       <div class="sub">${calculated.safetyMarginRatio ? formatter.formatPercentage(calculated.safetyMarginRatio) : '-'}</div>
     </div>
     <div class="metric-card">
-      <div class="label">変動費率 (Variable Cost Ratio)</div>
+      <div class="label">Variable Cost Ratio | 変動費率</div>
       <div class="value">${formatter.formatPercentage(calculated.variableCostRatio)}</div>
     </div>
     <div class="metric-card">
-      <div class="label">固定費率 (Fixed Cost Ratio)</div>
+      <div class="label">Fixed Cost Ratio | 固定費率</div>
       <div class="value">${formatter.formatPercentage(calculated.fixedCostRatio)}</div>
     </div>
   `;
@@ -191,7 +209,7 @@ function initProfitCharts(): void {
   if (canvas1) {
     const config = createTreemapChartConfig({
       input: {
-        label: '高収益',
+        label: 'High Profit | 高収益',
         sales: 10_000_000,
         variableCosts: 3_000_000,
         fixedCosts: 3_000_000,
@@ -206,7 +224,7 @@ function initProfitCharts(): void {
   if (canvas2) {
     const config = createTreemapChartConfig({
       input: {
-        label: '標準',
+        label: 'Standard | 標準',
         sales: 10_000_000,
         variableCosts: 5_000_000,
         fixedCosts: 3_000_000,
@@ -227,7 +245,7 @@ function initLossCharts(): void {
   if (canvas1) {
     const config = createTreemapChartConfig({
       input: {
-        label: '軽度赤字',
+        label: 'Minor Loss | 軽度赤字',
         sales: 10_000_000,
         variableCosts: 5_000_000,
         fixedCosts: 6_000_000,
@@ -245,7 +263,7 @@ function initLossCharts(): void {
   if (canvas2) {
     const config = createTreemapChartConfig({
       input: {
-        label: '重度赤字',
+        label: 'Major Loss | 重度赤字',
         sales: 10_000_000,
         variableCosts: 6_000_000,
         fixedCosts: 6_000_000,
@@ -260,14 +278,53 @@ function initLossCharts(): void {
 }
 
 // ============================================================================
-// 5. Monthly Comparison Charts
+// 5. Loss Display Mode Charts
+// ============================================================================
+
+function initLossModeCharts(): void {
+  const lossInput = {
+    label: 'Loss Mode Demo',
+    sales: 10_000_000,
+    variableCosts: 5_000_000,
+    fixedCosts: 6_500_000, // Creates -1.5M loss
+  };
+
+  // Mode 1: negative-bar (extends downward)
+  const canvas1 = document.getElementById('lossModeChart1') as HTMLCanvasElement;
+  if (canvas1) {
+    const config = createTreemapChartConfig({
+      input: { ...lossInput, label: 'negative-bar' },
+      display: {
+        ...defaultDisplayOptions,
+        lossDisplayMode: 'negative-bar',
+      },
+    });
+    new Chart(canvas1, config);
+  }
+
+  // Mode 2: separate (separate block)
+  const canvas2 = document.getElementById('lossModeChart2') as HTMLCanvasElement;
+  if (canvas2) {
+    const config = createTreemapChartConfig({
+      input: { ...lossInput, label: 'separate' },
+      display: {
+        ...defaultDisplayOptions,
+        lossDisplayMode: 'separate',
+      },
+    });
+    new Chart(canvas2, config);
+  }
+}
+
+// ============================================================================
+// 6. Monthly Comparison Charts
 // ============================================================================
 
 function initMonthlyCharts(): void {
   const monthlyData = [
-    { id: 'monthChart1', label: '10月', sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 3_000_000 },
-    { id: 'monthChart2', label: '11月', sales: 9_000_000, variableCosts: 4_500_000, fixedCosts: 3_000_000 },
-    { id: 'monthChart3', label: '12月', sales: 12_000_000, variableCosts: 6_000_000, fixedCosts: 3_000_000 },
+    { id: 'monthChart1', label: 'Oct | 10月', sales: 10_000_000, variableCosts: 5_000_000, fixedCosts: 3_000_000 },
+    { id: 'monthChart2', label: 'Nov | 11月', sales: 9_000_000, variableCosts: 4_500_000, fixedCosts: 3_000_000 },
+    { id: 'monthChart3', label: 'Dec | 12月', sales: 12_000_000, variableCosts: 6_000_000, fixedCosts: 3_000_000 },
   ];
 
   monthlyData.forEach(data => {
@@ -292,12 +349,12 @@ function initMonthlyCharts(): void {
 }
 
 // ============================================================================
-// 6. Color Scheme Charts
+// 7. Color Scheme Charts
 // ============================================================================
 
 function initColorCharts(): void {
   const sampleInput = {
-    label: 'サンプル',
+    label: 'Sample | サンプル',
     sales: 10_000_000,
     variableCosts: 4_000_000,
     fixedCosts: 3_000_000,
@@ -352,6 +409,7 @@ function initAllCharts(): void {
   initInteractiveChart();
   initProfitCharts();
   initLossCharts();
+  initLossModeCharts();
   initMonthlyCharts();
   initColorCharts();
 }
