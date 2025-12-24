@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-12-24
+
+### Added
+
+#### Correct Loss Display (赤字表示の正確な実装)
+
+- **Loss extends below chart area**: When in deficit (costs > sales), the loss portion now correctly extends below the zero line
+  - Uses `heightExtension` scaling to fit both normal area and loss area within the chart
+  - Visual representation: Loss "protrudes" below the sales area, like a negative bar chart
+  - Both `negative-bar` and `separate` modes now work correctly
+
+- **赤字が下にはみ出る表示**: 総コストが売上を超える場合、損失部分がゼロラインより下に正しく表示されるようになりました
+  - `heightExtension`スケーリングで通常エリアと損失エリアを両方チャート内に収める
+  - 視覚的表現：棒グラフがゼロラインを下回るように、損失が下にはみ出る
+  - `negative-bar`と`separate`両モードが正しく動作
+
+#### Slick-style Documentation (Slick風ドキュメント)
+
+- **README completely rewritten**: Slick.js-inspired documentation style
+  - Clear "Getting Started" section with 3 steps
+  - **Option Reference Table**: All options with types, defaults, and descriptions
+  - **Color Schemes Guide**: 5 built-in schemes with use cases
+  - **Custom Colors**: How to override individual colors
+  - **Tips & Tricks**: Responsive charts, multiple charts, dark mode, export
+  - Bilingual (English/Japanese) with clear separation
+
+### Changed
+
+- TreemapRenderer: Uses `heightExtension` from layout metadata for proper scaling
+- TreemapLayoutEngine: Correct `heightExtension` calculation for loss scenarios
+- Demo page updated to v0.4.0
+
 ## [0.3.2] - 2025-12-24
 
 ### Fixed
@@ -216,7 +248,8 @@ This is the first public release of the Contribution Margin Chart library.
 
 **Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
 
-[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.4.0
 [0.3.2]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.2
 [0.3.1]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.1
 [0.3.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.0

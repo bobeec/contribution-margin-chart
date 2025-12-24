@@ -1,6 +1,6 @@
 {
   "name": "@contribution-margin/core",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Core calculation and layout engine for CVP (Cost-Volume-Profit) analysis charts - Chart library agnostic",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

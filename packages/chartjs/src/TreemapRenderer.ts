@@ -53,16 +53,28 @@ export class TreemapRenderer {
    * Render all treemap blocks
    * 
    * @param blocks - Treemap blocks to render
-   * @param _layoutMeta - Layout metadata including height extension info (reserved for future use)
+   * @param layoutMeta - Layout metadata including height extension info
+   * 
+   * 赤字の場合の描画:
+   * - heightExtension > 1.0 の場合、全体をスケーリングして損失部分を含める
+   * - 売上高部分は上部に縮小され、損失部分が下に「はみ出る」ように見える
    */
-  renderBlocks(blocks: TreemapBlock[], _layoutMeta?: TreemapLayoutOutput['meta']): void {
+  renderBlocks(blocks: TreemapBlock[], layoutMeta?: TreemapLayoutOutput['meta']): void {
     const { left, top, right, bottom } = this.chartArea;
     const chartWidth = right - left;
-    const baseChartHeight = bottom - top;
+    const chartHeight = bottom - top;
 
-    // 赤字の場合、heightExtension > 1.0 となり、チャートエリアを超えて描画
-    // 現在は heightExtension を使用せず、ブロックの y, height 値で直接はみ出しを表現
-    // 将来的なスケーリング機能のために _layoutMeta 情報は保持される
+    // 赤字の場合、heightExtension > 1.0 となる
+    // 全体をスケーリングして、損失部分も含めてチャートエリア内に描画
+    const heightExtension = layoutMeta?.heightExtension ?? 1;
+    
+    // スケーリング係数: 損失がある場合、全体を縮小して損失部分を含める
+    // 例: heightExtension = 1.2 なら、全体を 1/1.2 = 0.833 にスケール
+    const scaleFactor = 1 / heightExtension;
+    
+    // 売上高（y=0〜1）の実際の描画高さ
+    // 損失がある場合、売上高部分は上部に配置され、下に損失がはみ出る
+    const salesAreaHeight = chartHeight * scaleFactor;
 
     // Sort blocks by type to ensure proper layering
     // 損失ブロックは最後に描画（他のブロックの上に重ならないように）
@@ -72,7 +84,7 @@ export class TreemapRenderer {
     );
 
     sortedBlocks.forEach(block => {
-      this.renderBlock(block, left, top, chartWidth, baseChartHeight);
+      this.renderBlock(block, left, top, chartWidth, salesAreaHeight);
     });
   }
 

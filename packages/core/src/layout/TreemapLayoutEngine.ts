@@ -317,22 +317,25 @@ export class TreemapLayoutEngine {
             meta: { isLoss: true, extendsBelow: true },
           });
         } else {
-          // separate モード：損失を別ブロックとして横に表示
+          // separate モード：損失を別ブロックとして右下に表示（はみ出る、分離）
+          // 固定費ブロックとは視覚的に分離した別ブロックとして、下にはみ出す
+          // 少しだけ隙間を空けて「別ブロック」であることを強調
+          const separateGap = 0.01; // 縦方向の小さな隙間（分離感）
           blocks.push({
             id: 'loss',
             type: 'loss',
             label: this.labels.loss,
             value: calculated.operatingProfit,
             x: innerRightX,
-            y: contributionY + contributionHeight - Math.min(lossRatio, contributionHeight * 0.3),
+            y: 1 + separateGap, // 売上高の下端から隙間を空けて開始（はみ出る＋分離）
             width: innerRightWidth,
-            height: Math.min(lossRatio, contributionHeight * 0.3),
+            height: Math.max(lossRatio, 0.15), // 最小15%の高さを確保して視認性UP
             color: this.colors.loss,
             borderColor: '#FFFFFF',
             textColor: '#FFFFFF',
             percentage: lossRatio,
             isCalculated: true,
-            meta: { isLoss: true, displayMode: 'separate' },
+            meta: { isLoss: true, displayMode: 'separate', extendsBelow: true },
           });
         }
       }

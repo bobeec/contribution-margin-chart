@@ -85,6 +85,9 @@ export const ContributionMarginTreemapPlugin: Plugin<'bar', ContributionMarginPl
 
   /**
    * Called after chart is drawn - render treemap
+   * 
+   * 赤字の場合、heightExtension > 1.0 となり、全体をスケーリングして描画
+   * これにより損失部分が「下にはみ出る」ように見える
    */
   afterDraw(chart: CVPTreemapChart, _args, options) {
     const cvpData = chart.$cvpTreemap;
@@ -107,7 +110,7 @@ export const ContributionMarginTreemapPlugin: Plugin<'bar', ContributionMarginPl
     );
 
     // Render treemap blocks with layout metadata
-    // layoutMeta には hasLoss, heightExtension などの情報が含まれる
+    // layoutMeta.heightExtension を使って、損失部分も含めてスケーリング描画
     renderer.renderBlocks(cvpData.blocks, cvpData.layoutMeta);
 
     // Render annotations
