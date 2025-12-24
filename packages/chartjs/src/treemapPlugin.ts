@@ -1,6 +1,10 @@
 /**
  * @contribution-margin/chartjs - Treemap Plugin
  * Chart.js plugin for CVP treemap charts
+ * 
+ * 赤字（損失）の場合：
+ * - negative-bar モード: 右側のコストが売上を超えた分、下にはみ出る
+ * - separate モード: 損失を別ブロックとして表示
  */
 
 import type { Chart, Plugin } from 'chart.js';
@@ -12,6 +16,7 @@ import {
   type DisplayOptions,
   type CVPResult,
   type TreemapBlock,
+  type TreemapLayoutOutput,
   type Annotation,
 } from '@contribution-margin/core';
 
@@ -28,6 +33,8 @@ interface CVPTreemapChart extends Chart<'bar'> {
     results: CVPResult[];
     options: DisplayOptions;
     salesValue: number;
+    /** Layout metadata including loss extension info */
+    layoutMeta: TreemapLayoutOutput['meta'];
   };
 }
 
@@ -99,8 +106,9 @@ export const ContributionMarginTreemapPlugin: Plugin<'bar', ContributionMarginPl
       chartArea.bottom - chartArea.top
     );
 
-    // Render treemap blocks
-    renderer.renderBlocks(cvpData.blocks);
+    // Render treemap blocks with layout metadata
+    // layoutMeta には hasLoss, heightExtension などの情報が含まれる
+    renderer.renderBlocks(cvpData.blocks, cvpData.layoutMeta);
 
     // Render annotations
     renderer.renderAnnotations(cvpData.annotations, cvpData.salesValue);
@@ -136,6 +144,12 @@ function processTreemapData(options: ContributionMarginPluginOptions) {
   let allBlocks: TreemapBlock[] = [];
   let allAnnotations: Annotation[] = [];
   let salesValue = 0;
+  let layoutMeta: TreemapLayoutOutput['meta'] = {
+    hasLoss: false,
+    hasBEP: false,
+    salesValue: 0,
+    heightExtension: 1,
+  };
 
   for (const inputData of inputs) {
     const validation = validator.validate(inputData);
@@ -155,6 +169,7 @@ function processTreemapData(options: ContributionMarginPluginOptions) {
     allBlocks = [...allBlocks, ...layout.blocks];
     allAnnotations = [...allAnnotations, ...layout.annotations];
     salesValue = inputData.sales;
+    layoutMeta = layout.meta;
   }
 
   if (results.length === 0) return null;
@@ -165,6 +180,7 @@ function processTreemapData(options: ContributionMarginPluginOptions) {
     results,
     options: display ?? DEFAULT_DISPLAY_OPTIONS,
     salesValue,
+    layoutMeta,
   };
 }
 

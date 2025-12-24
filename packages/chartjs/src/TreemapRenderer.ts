@@ -2,7 +2,7 @@
  * @contribution-margin/chartjs - Treemap Renderer
  * Canvas rendering for CVP Treemap charts
  * 
- * Layout:
+ * Layout (Profit case):
  * ┌─────────────┬──────────────────────────┐
  * │             │        変動費            │
  * │   売上高    ├────────────┬─────────────┤
@@ -10,15 +10,27 @@
  * │             │            ├─────────────┤
  * │             │            │   利益      │
  * └─────────────┴────────────┴─────────────┘
+ * 
+ * Layout (Loss case - extends below):
+ * ┌─────────────┬──────────────────────────┐
+ * │             │        変動費            │
+ * │   売上高    ├────────────┬─────────────┤
+ * │             │   粗利     │   固定費    │
+ * │             │            │             │
+ * └─────────────┴────────────┼─────────────┤
+ *                            │   損失      │  ← はみ出る
+ *                            └─────────────┘
  */
 
 import type { ChartArea } from 'chart.js';
 import type { DisplayOptions, CVPResult, Annotation } from '@contribution-margin/core';
-import type { TreemapBlock } from '@contribution-margin/core';
+import type { TreemapBlock, TreemapLayoutOutput } from '@contribution-margin/core';
 import { ValueFormatter, DEFAULT_DISPLAY_OPTIONS } from '@contribution-margin/core';
 
 /**
  * Treemap Renderer for CVP charts
+ * 
+ * 赤字（損失）がある場合、右側のコストエリアが売上高を超えて下にはみ出る表現をサポート
  */
 export class TreemapRenderer {
   private ctx: CanvasRenderingContext2D;
@@ -39,25 +51,35 @@ export class TreemapRenderer {
 
   /**
    * Render all treemap blocks
+   * 
+   * @param blocks - Treemap blocks to render
+   * @param _layoutMeta - Layout metadata including height extension info (reserved for future use)
    */
-  renderBlocks(blocks: TreemapBlock[]): void {
+  renderBlocks(blocks: TreemapBlock[], _layoutMeta?: TreemapLayoutOutput['meta']): void {
     const { left, top, right, bottom } = this.chartArea;
     const chartWidth = right - left;
-    const chartHeight = bottom - top;
+    const baseChartHeight = bottom - top;
+
+    // 赤字の場合、heightExtension > 1.0 となり、チャートエリアを超えて描画
+    // 現在は heightExtension を使用せず、ブロックの y, height 値で直接はみ出しを表現
+    // 将来的なスケーリング機能のために _layoutMeta 情報は保持される
 
     // Sort blocks by type to ensure proper layering
+    // 損失ブロックは最後に描画（他のブロックの上に重ならないように）
     const sortOrder = ['sales', 'variable', 'contribution', 'fixed', 'profit', 'loss'];
     const sortedBlocks = [...blocks].sort(
       (a, b) => sortOrder.indexOf(a.type) - sortOrder.indexOf(b.type)
     );
 
     sortedBlocks.forEach(block => {
-      this.renderBlock(block, left, top, chartWidth, chartHeight);
+      this.renderBlock(block, left, top, chartWidth, baseChartHeight);
     });
   }
 
   /**
    * Render a single block
+   * 
+   * 赤字の損失ブロックは y >= 1.0 から開始し、チャートエリアの下にはみ出して描画される
    */
   private renderBlock(
     block: TreemapBlock,
@@ -69,6 +91,8 @@ export class TreemapRenderer {
     const ctx = this.ctx;
 
     // Calculate pixel coordinates
+    // block.y と block.height は正規化された値（0-1が売上高の範囲）
+    // 損失ブロックの場合、y >= 1.0 で下にはみ出る
     const x = baseX + block.x * totalWidth;
     const y = baseY + block.y * totalHeight;
     const width = block.width * totalWidth;
@@ -76,6 +100,9 @@ export class TreemapRenderer {
 
     // Skip blocks with no visible area
     if (width < 1 || height < 1) return;
+
+    // 損失ブロックが下にはみ出ているかチェック
+    const extendsBelow = block.meta?.extendsBelow === true;
 
     // Draw background
     ctx.fillStyle = block.color;
@@ -86,8 +113,41 @@ export class TreemapRenderer {
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, width, height);
 
+    // 下にはみ出る損失ブロックには特別な視覚効果を追加
+    if (extendsBelow && block.type === 'loss') {
+      // 斜線パターンを追加して「はみ出し」を強調
+      this.drawLossPattern(ctx, x, y, width, height);
+    }
+
     // Draw label and value
     this.renderBlockLabel(block, x, y, width, height);
+  }
+
+  /**
+   * Draw pattern for loss block extending below
+   * 損失ブロックに斜線パターンを描画（はみ出しを視覚的に強調）
+   */
+  private drawLossPattern(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 1;
+
+    // Draw diagonal lines
+    const spacing = 8;
+    for (let i = -height; i < width + height; i += spacing) {
+      ctx.beginPath();
+      ctx.moveTo(x + i, y);
+      ctx.lineTo(x + i - height, y + height);
+      ctx.stroke();
+    }
+
+    ctx.restore();
   }
 
   /**
@@ -124,7 +184,9 @@ export class TreemapRenderer {
     if (this.options.showValues !== false && width > 50 && height > 40) {
       ctx.font = `${baseFontSize - 1}px sans-serif`;
       const valueText = this.formatter.format(Math.abs(block.value));
-      ctx.fillText(valueText, centerX, centerY + baseFontSize * 0.5);
+      // 損失の場合はマイナス記号を付ける
+      const displayText = block.type === 'loss' ? `-${valueText}` : valueText;
+      ctx.fillText(displayText, centerX, centerY + baseFontSize * 0.5);
     }
 
     // Draw percentage for larger blocks

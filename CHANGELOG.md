@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2025-12-24
+
+### Fixed
+
+#### Loss Display (赤字表示の修正)
+
+- **Loss extends below chart area**: When in deficit (赤字), the loss portion now correctly extends below the chart
+  - In CVP analysis, when costs exceed sales, the right side (cost side) should visually extend below the sales (left side)
+  - `negative-bar` mode: Loss block starts at y=1.0 (bottom of sales) and extends downward
+  - Visual pattern (diagonal lines) added to emphasize the protruding loss area
+  - This accurately represents that "total costs are larger than sales"
+
+- **CVP分析での正確な赤字表現**: 売上高＜総コストの場合、右側のコストエリアが売上高を超えて下に「はみ出る」表現を実装
+  - 赤字は「左の売上に対して右のコストが大きい = 下にはみ出る」状態
+  - `negative-bar`モード: 損失ブロックがグラフ下端から突き出る
+  - 斜線パターンで「はみ出し」を視覚的に強調
+
+### Changed
+
+- TreemapRenderer: Improved loss block rendering with height extension support
+- TreemapLayoutEngine: Better calculation of loss block positioning (y >= 1.0 for loss)
+- Demo page updated to v0.3.2 with improved loss visualization
+
 ## [0.3.1] - 2025-12-24
 
 ### Added
@@ -193,7 +216,8 @@ This is the first public release of the Contribution Margin Chart library.
 
 **Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
 
-[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.2
 [0.3.1]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.1
 [0.3.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.0
 [0.2.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.2.0

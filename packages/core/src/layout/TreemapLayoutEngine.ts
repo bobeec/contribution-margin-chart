@@ -2,7 +2,7 @@
  * @contribution-margin/core - Treemap Layout Engine
  * Generate treemap-style layout for CVP chart rendering
  * 
- * Layout structure:
+ * Layout structure (Profit case):
  * ┌─────────────┬──────────────────────────┐
  * │             │        変動費            │
  * │             │        (Variable)        │
@@ -10,8 +10,20 @@
  * │   (Sales)   │            │   固定費    │
  * │             │   粗利     │   (Fixed)   │
  * │             │   (CM)     ├─────────────┤
- * │             │            │  利益/損失  │
+ * │             │            │  利益       │
  * └─────────────┴────────────┴─────────────┘
+ * 
+ * Layout structure (Loss case - extends downward):
+ * ┌─────────────┬──────────────────────────┐
+ * │             │        変動費            │
+ * │             │        (Variable)        │
+ * │   売上高    ├────────────┬─────────────┤
+ * │   (Sales)   │            │   固定費    │
+ * │             │   粗利     │   (Fixed)   │
+ * │             │   (CM)     │             │
+ * └─────────────┴────────────┼─────────────┤
+ *                            │   損失      │  ← はみ出る
+ *                            └─────────────┘
  */
 
 import type {
@@ -78,12 +90,18 @@ export interface TreemapLayoutOutput {
     hasLoss: boolean;
     hasBEP: boolean;
     salesValue: number;
+    /** Height extension ratio for loss (1.0 = no extension, >1.0 = extends below) */
+    heightExtension: number;
   };
 }
 
 /**
  * Treemap Layout Engine
  * CVP分析のTreemap形式レイアウトを生成
+ * 
+ * 赤字（損失）の場合：
+ * - negative-bar モード: 右側のコストが売上を超えた分、下にはみ出る
+ * - separate モード: 損失を別ブロックとして右側に表示
  */
 export class TreemapLayoutEngine {
   private colors: Required<ColorPalette>;
@@ -111,7 +129,7 @@ export class TreemapLayoutEngine {
     this.labels = getLabels(displayOptions.locale ?? 'ja-JP');
     this.formatter = ValueFormatter.fromDisplayOptions(displayOptions);
 
-    const blocks = this.generateBlocks(input, calculated, displayOptions);
+    const { blocks, heightExtension } = this.generateBlocks(input, calculated, displayOptions);
     const annotations = this.generateAnnotations(input, calculated, displayOptions);
 
     return {
@@ -123,34 +141,50 @@ export class TreemapLayoutEngine {
         hasLoss: calculated.operatingProfit < 0,
         hasBEP: calculated.breakEvenPoint !== null,
         salesValue: input.sales,
+        heightExtension,
       },
     };
   }
 
   /**
    * Generate treemap blocks
+   * 
+   * 赤字（損失）の場合の動作：
+   * - negative-bar: 総コスト（変動費+固定費）が売上を超えた分、右側全体が下にはみ出る
+   * - separate: 損失を別ブロックとして表示
    */
   private generateBlocks(
     input: CVPInput,
     calculated: CVPCalculatedValues,
     options: DisplayOptions
-  ): TreemapBlock[] {
+  ): { blocks: TreemapBlock[]; heightExtension: number } {
     const blocks: TreemapBlock[] = [];
     const sales = input.sales;
     
-    if (sales <= 0) return blocks;
+    if (sales <= 0) return { blocks, heightExtension: 1 };
 
-    // Calculate ratios
+    // 総コスト = 変動費 + 固定費
+    const totalCosts = input.variableCosts + input.fixedCosts;
+    const isLoss = calculated.operatingProfit < 0;
+    const lossDisplayMode = options.lossDisplayMode ?? 'negative-bar';
+
+    // Calculate height extension for loss (how much the right side extends beyond sales)
+    // 赤字の場合、コストが売上を超えた分だけ高さを拡張
+    let heightExtension = 1;
+    if (isLoss && lossDisplayMode === 'negative-bar') {
+      // Total height should represent total costs when in loss
+      heightExtension = totalCosts / sales;
+    }
+
+    // Calculate ratios based on sales (for normal case) or total costs (for loss)
     const variableRatio = input.variableCosts / sales;
     const contributionRatio = calculated.contributionMargin / sales;
     const fixedRatio = input.fixedCosts / sales;
-    const profitRatio = calculated.operatingProfit / sales;
 
-    // Sales block takes left portion (width = contribution margin ratio)
-    // This creates the visual effect where Sales height = Variable + Contribution
-    const salesWidth = 0.35; // Fixed width for sales column
+    // Sales block takes left portion
+    const salesWidth = 0.35;
 
-    // Block 1: Sales (left column, full height)
+    // Block 1: Sales (left column, height = 1.0 = 売上高を基準)
     blocks.push({
       id: 'sales',
       type: 'sales',
@@ -159,7 +193,7 @@ export class TreemapLayoutEngine {
       x: 0,
       y: 0,
       width: salesWidth,
-      height: 1,
+      height: 1, // Sales is always height 1 (base reference)
       color: this.colors.sales,
       borderColor: '#FFFFFF',
       textColor: this.getContrastColor(this.colors.sales),
@@ -167,11 +201,12 @@ export class TreemapLayoutEngine {
       isCalculated: false,
     });
 
-    // Right side blocks (1 - salesWidth)
+    // Right side blocks
     const rightWidth = 1 - salesWidth;
     const rightX = salesWidth;
 
     // Block 2: Variable Costs (top right)
+    // 変動費の高さは、売上に対する比率
     const variableHeight = variableRatio;
     blocks.push({
       id: 'variable',
@@ -191,11 +226,12 @@ export class TreemapLayoutEngine {
 
     // Contribution margin area (below variable costs)
     const contributionY = variableHeight;
-    const contributionHeight = contributionRatio;
 
     if (contributionRatio > 0) {
-      // Block 3: Contribution Margin / Gross Profit (middle right - spanning)
-      // This is shown as a "container" - we'll add it as background
+      // 限界利益がプラスの場合
+      const contributionHeight = contributionRatio;
+
+      // Block 3: Contribution Margin / Gross Profit
       blocks.push({
         id: 'contribution',
         type: 'contribution',
@@ -203,7 +239,7 @@ export class TreemapLayoutEngine {
         value: calculated.contributionMargin,
         x: rightX,
         y: contributionY,
-        width: rightWidth * 0.5, // Takes left half of right section
+        width: rightWidth * 0.5,
         height: contributionHeight,
         color: this.colors.contribution,
         borderColor: '#FFFFFF',
@@ -217,7 +253,7 @@ export class TreemapLayoutEngine {
       const innerRightWidth = rightWidth * 0.5;
 
       // Block 4: Fixed Costs
-      const fixedHeightNormalized = (fixedRatio / contributionRatio) * contributionHeight;
+      // 固定費の高さは売上に対する比率
       blocks.push({
         id: 'fixed',
         type: 'fixed',
@@ -226,7 +262,7 @@ export class TreemapLayoutEngine {
         x: innerRightX,
         y: contributionY,
         width: innerRightWidth,
-        height: Math.min(fixedHeightNormalized, contributionHeight),
+        height: fixedRatio,
         color: this.colors.fixed,
         borderColor: '#FFFFFF',
         textColor: this.getContrastColor(this.colors.fixed),
@@ -235,10 +271,11 @@ export class TreemapLayoutEngine {
       });
 
       // Block 5: Profit or Loss
-      const profitY = contributionY + fixedHeightNormalized;
-      const profitHeightNormalized = contributionHeight - fixedHeightNormalized;
-
-      if (calculated.operatingProfit >= 0) {
+      if (!isLoss) {
+        // 黒字の場合：利益ブロックを固定費の下に表示
+        const profitRatio = calculated.operatingProfit / sales;
+        const profitY = contributionY + fixedRatio;
+        
         blocks.push({
           id: 'profit',
           type: 'profit',
@@ -247,57 +284,62 @@ export class TreemapLayoutEngine {
           x: innerRightX,
           y: profitY,
           width: innerRightWidth,
-          height: Math.max(0, profitHeightNormalized),
+          height: profitRatio,
           color: this.colors.profit,
           borderColor: '#FFFFFF',
           textColor: this.getContrastColor(this.colors.profit),
-          percentage: Math.abs(profitRatio),
+          percentage: profitRatio,
           isCalculated: true,
         });
       } else {
-        // Loss case - show as extending beyond or as overlay
-        const lossDisplayMode = options.lossDisplayMode ?? 'negative-bar';
-        
+        // 赤字の場合：損失の表示方法を選択
+        const lossAmount = Math.abs(calculated.operatingProfit);
+        const lossRatio = lossAmount / sales;
+
         if (lossDisplayMode === 'negative-bar') {
-          // Show loss extending beyond the contribution area
+          // negative-bar モード：右側が下にはみ出る
+          // 固定費が限界利益を超えた分 = 損失 → 下にはみ出る
+          // 損失ブロックは y=1.0 から開始（売上高の下端から）
           blocks.push({
             id: 'loss',
             type: 'loss',
             label: this.labels.loss,
             value: calculated.operatingProfit,
             x: innerRightX,
-            y: contributionY + contributionHeight,
+            y: 1, // Start from bottom of sales (y=1.0)
             width: innerRightWidth,
-            height: Math.abs(profitRatio),
+            height: lossRatio, // Extends below
             color: this.colors.loss,
             borderColor: '#FFFFFF',
             textColor: this.getContrastColor(this.colors.loss),
-            percentage: Math.abs(profitRatio),
+            percentage: lossRatio,
             isCalculated: true,
-            meta: { isLoss: true },
+            meta: { isLoss: true, extendsBelow: true },
           });
         } else {
-          // Overlay mode - show within fixed costs area
+          // separate モード：損失を別ブロックとして横に表示
           blocks.push({
             id: 'loss',
             type: 'loss',
             label: this.labels.loss,
             value: calculated.operatingProfit,
             x: innerRightX,
-            y: contributionY + contributionHeight - 0.05,
+            y: contributionY + contributionHeight - Math.min(lossRatio, contributionHeight * 0.3),
             width: innerRightWidth,
-            height: 0.05,
+            height: Math.min(lossRatio, contributionHeight * 0.3),
             color: this.colors.loss,
             borderColor: '#FFFFFF',
             textColor: '#FFFFFF',
-            percentage: Math.abs(profitRatio),
+            percentage: lossRatio,
             isCalculated: true,
-            meta: { isLoss: true, displayMode: lossDisplayMode },
+            meta: { isLoss: true, displayMode: 'separate' },
           });
         }
       }
     } else {
       // Negative or zero contribution margin - all loss
+      // 限界利益がマイナスまたはゼロの場合
+      const lossAmount = Math.abs(calculated.operatingProfit);
       blocks.push({
         id: 'loss',
         type: 'loss',
@@ -306,17 +348,17 @@ export class TreemapLayoutEngine {
         x: rightX,
         y: variableHeight,
         width: rightWidth,
-        height: 1 - variableHeight,
+        height: lossAmount / sales,
         color: this.colors.loss,
         borderColor: '#FFFFFF',
         textColor: this.getContrastColor(this.colors.loss),
-        percentage: Math.abs(calculated.operatingProfit / sales),
+        percentage: lossAmount / sales,
         isCalculated: true,
-        meta: { isLoss: true },
+        meta: { isLoss: true, extendsBelow: true },
       });
     }
 
-    return blocks;
+    return { blocks, heightExtension };
   }
 
   /**
@@ -364,7 +406,6 @@ export class TreemapLayoutEngine {
    * Get contrasting text color for background
    */
   private getContrastColor(bgColor: string): string {
-    // Simple luminance check
     const hex = bgColor.replace('#', '');
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
