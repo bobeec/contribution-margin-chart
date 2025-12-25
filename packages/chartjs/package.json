@@ -1,5 +1,5 @@
 {
-  "name": "@contribution-margin/chartjs",
+  "name": "@bobeec/contribution-margin-chart",
   "version": "0.4.0",
   "description": "Chart.js plugin for CVP (Cost-Volume-Profit) analysis charts - Horizontal stacked bar charts for profit structure visualization",
   "main": "./dist/index.js",
@@ -46,7 +46,7 @@
     "chart.js": "^3.0.0 || ^4.0.0"
   },
   "dependencies": {
-    "@contribution-margin/core": "workspace:*"
+    "@bobeec/contribution-margin-core": "^0.4.0"
   },
   "devDependencies": {
     "chart.js": "^4.4.0",

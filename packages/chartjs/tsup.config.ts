@@ -11,5 +11,5 @@ export default defineConfig({
   minify: false,
   target: 'es2020',
   outDir: 'dist',
-  external: ['chart.js', '@contribution-margin/core'],
+  external: ['chart.js', '@bobeec/contribution-margin-core'],
 });

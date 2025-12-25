@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Type Definitions
+ * @bobeec/contribution-margin-chart - Type Definitions
  * Chart.js specific types for CVP analysis charts
  */
 
@@ -11,7 +11,7 @@ import type {
   Segment,
   Annotation,
   CVPResult,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 import type { Chart, Plugin } from 'chart.js';
 
 /**

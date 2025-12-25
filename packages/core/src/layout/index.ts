@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core/layout
+ * @bobeec/contribution-margin-core/layout
  * Layout Engine for CVP Charts
  */
 

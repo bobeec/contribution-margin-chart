@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs
+ * @bobeec/contribution-margin-chart
  * Chart.js plugin for CVP (Cost-Volume-Profit) analysis charts
  *
  * This library implements general CVP analysis (Cost-Volume-Profit Analysis)
@@ -46,7 +46,7 @@ export type {
   ColorPalette,
   ValidationResult,
   Warning,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 
 // Re-export core utilities for convenience
 export {
@@ -60,7 +60,7 @@ export {
   calculateCVP,
   validateCVP,
   formatValue,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 
 // Re-export treemap types
-export type { TreemapBlock, TreemapLayoutOutput } from '@contribution-margin/core';
+export type { TreemapBlock, TreemapLayoutOutput } from '@bobeec/contribution-margin-core';

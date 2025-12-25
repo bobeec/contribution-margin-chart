@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Treemap Renderer
+ * @bobeec/contribution-margin-chart - Treemap Renderer
  * Canvas rendering for CVP Treemap charts
  * 
  * Layout (Profit case):
@@ -23,9 +23,9 @@
  */
 
 import type { ChartArea } from 'chart.js';
-import type { DisplayOptions, CVPResult, Annotation } from '@contribution-margin/core';
-import type { TreemapBlock, TreemapLayoutOutput } from '@contribution-margin/core';
-import { ValueFormatter, DEFAULT_DISPLAY_OPTIONS } from '@contribution-margin/core';
+import type { DisplayOptions, CVPResult, Annotation } from '@bobeec/contribution-margin-core';
+import type { TreemapBlock, TreemapLayoutOutput } from '@bobeec/contribution-margin-core';
+import { ValueFormatter, DEFAULT_DISPLAY_OPTIONS } from '@bobeec/contribution-margin-core';
 
 /**
  * Treemap Renderer for CVP charts

@@ -1,5 +1,5 @@
 {
-  "name": "@contribution-margin/core",
+  "name": "@bobeec/contribution-margin-core",
   "version": "0.4.0",
   "description": "Core calculation and layout engine for CVP (Cost-Volume-Profit) analysis charts - Chart library agnostic",
   "main": "./dist/index.js",

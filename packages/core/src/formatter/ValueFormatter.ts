@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core - Value Formatter
+ * @bobeec/contribution-margin-core - Value Formatter
  * Number formatting utilities for CVP charts
  */
 

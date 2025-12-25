@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core - Constants
+ * @bobeec/contribution-margin-core - Constants
  * Default values and predefined configurations
  */
 

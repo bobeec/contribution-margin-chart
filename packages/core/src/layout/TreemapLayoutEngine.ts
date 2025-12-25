@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core - Treemap Layout Engine
+ * @bobeec/contribution-margin-core - Treemap Layout Engine
  * Generate treemap-style layout for CVP chart rendering
  * 
  * Layout structure (Profit case):

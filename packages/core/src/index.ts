@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core
+ * @bobeec/contribution-margin-core
  * Core calculation and layout engine for CVP (Cost-Volume-Profit) analysis charts
  *
  * This library implements general CVP analysis (Cost-Volume-Profit Analysis)
@@ -66,7 +66,7 @@ import { ValueFormatter } from './formatter';
  *
  * @example
  * ```typescript
- * import { calculateCVP } from '@contribution-margin/core';
+ * import { calculateCVP } from '@bobeec/contribution-margin-core';
  *
  * const result = calculateCVP({
  *   sales: 10_000_000,
@@ -89,7 +89,7 @@ export function calculateCVP(input: CVPInput): CVPResult {
  *
  * @example
  * ```typescript
- * import { validateCVP } from '@contribution-margin/core';
+ * import { validateCVP } from '@bobeec/contribution-margin-core';
  *
  * const result = validateCVP({
  *   sales: 10_000_000,
@@ -113,7 +113,7 @@ export function validateCVP(input: CVPInput): ValidationResult {
  *
  * @example
  * ```typescript
- * import { generateLayout } from '@contribution-margin/core';
+ * import { generateLayout } from '@bobeec/contribution-margin-core';
  *
  * const layout = generateLayout({
  *   sales: 10_000_000,
@@ -142,7 +142,7 @@ export function generateLayout(input: CVPInput, options?: DisplayOptions): Layou
  *
  * @example
  * ```typescript
- * import { formatValue } from '@contribution-margin/core';
+ * import { formatValue } from '@bobeec/contribution-margin-core';
  *
  * console.log(formatValue(10_000_000)); // "¥10,000千円"
  * console.log(formatValue(10_000_000, { unitMode: 'million' })); // "¥10百万円"
@@ -166,7 +166,7 @@ export function formatValue(
  *
  * @example
  * ```typescript
- * import { CVP } from '@contribution-margin/core';
+ * import { CVP } from '@bobeec/contribution-margin-core';
  *
  * const cvp = new CVP({
  *   sales: 10_000_000,

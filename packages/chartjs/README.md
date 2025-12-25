@@ -1,11 +1,11 @@
-# @contribution-margin/chartjs
+# @bobeec/contribution-margin-chart
 
 Chart.js plugin for CVP (Cost-Volume-Profit) analysis charts.
 
 ## Installation
 
 ```bash
-npm install @contribution-margin/chartjs chart.js
+npm install @bobeec/contribution-margin-chart chart.js
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ npm install @contribution-margin/chartjs chart.js
 
 ```typescript
 import { Chart } from 'chart.js';
-import { ContributionMarginPlugin } from '@contribution-margin/chartjs';
+import { ContributionMarginPlugin } from '@bobeec/contribution-margin-chart';
 
 Chart.register(ContributionMarginPlugin);
 ```
@@ -22,7 +22,7 @@ Chart.register(ContributionMarginPlugin);
 ### Create Chart
 
 ```typescript
-import { createCVPChartConfig } from '@contribution-margin/chartjs';
+import { createCVPChartConfig } from '@bobeec/contribution-margin-chart';
 
 const config = createCVPChartConfig({
   input: {
@@ -81,3 +81,4 @@ See the [main documentation](../../README.md) for full API reference.
 ## License
 
 MIT
+

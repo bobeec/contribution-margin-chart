@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Plugin
+ * @bobeec/contribution-margin-chart - Plugin
  * Chart.js plugin for CVP analysis charts
  */
 
@@ -13,7 +13,7 @@ import {
   type CVPResult,
   type Segment,
   type Annotation,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 
 import type { ContributionMarginPluginOptions, CVPChartData, CVPChart } from './types';
 import { CVPRenderer } from './renderer';
@@ -27,7 +27,7 @@ import { CVPRenderer } from './renderer';
  * @example
  * ```typescript
  * import { Chart } from 'chart.js';
- * import { ContributionMarginPlugin } from '@contribution-margin/chartjs';
+ * import { ContributionMarginPlugin } from '@bobeec/contribution-margin-chart';
  *
  * Chart.register(ContributionMarginPlugin);
  *

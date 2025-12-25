@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core - Layout Engine
+ * @bobeec/contribution-margin-core - Layout Engine
  * Generate segments and annotations for CVP chart rendering
  */
 

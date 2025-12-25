@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Treemap Chart Factory
+ * @bobeec/contribution-margin-chart - Treemap Chart Factory
  * Convenience functions for creating CVP treemap charts
  */
 
@@ -9,7 +9,7 @@ import type {
   CVPInputArray,
   DisplayOptions,
   MetricsConfig,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 
 import type { ContributionMarginPluginOptions } from './types';
 

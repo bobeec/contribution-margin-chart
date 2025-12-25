@@ -65,19 +65,19 @@ pnpm test
 ```
 contribution-margin-chart/
 ├── packages/
-│   ├── core/           # @contribution-margin/core
-│   │   ├── src/
-│   │   │   ├── calculator/   # CVPCalculator
-│   │   │   ├── validator/    # CVPValidator
-│   │   │   ├── layout/       # LayoutEngine
-│   │   │   ├── formatter/    # ValueFormatter
-│   │   │   ├── types/        # TypeScript types
-│   │   │   └── constants/    # Constants & presets
-│   │   └── tests/
-│   └── chartjs/        # @contribution-margin/chartjs
-│       └── src/
+━E  ├── core/           # @bobeec/contribution-margin-core
+━E  ━E  ├── src/
+━E  ━E  ━E  ├── calculator/   # CVPCalculator
+━E  ━E  ━E  ├── validator/    # CVPValidator
+━E  ━E  ━E  ├── layout/       # LayoutEngine
+━E  ━E  ━E  ├── formatter/    # ValueFormatter
+━E  ━E  ━E  ├── types/        # TypeScript types
+━E  ━E  ━E  └── constants/    # Constants & presets
+━E  ━E  └── tests/
+━E  └── chartjs/        # @bobeec/contribution-margin-chart
+━E      └── src/
 ├── examples/
-│   └── basic-chartjs/  # Demo application
+━E  └── basic-chartjs/  # Demo application
 ├── docs/               # Documentation
 └── ...
 ```
@@ -212,8 +212,8 @@ Tests should be placed in the `tests/` directory of each package:
 ```
 packages/core/
 ├── src/
-│   └── calculator/
-│       └── CVPCalculator.ts
+━E  └── calculator/
+━E      └── CVPCalculator.ts
 └── tests/
     └── CVPCalculator.test.ts
 ```
@@ -229,7 +229,7 @@ pnpm test:core
 pnpm test:chartjs
 
 # Run tests in watch mode
-pnpm --filter @contribution-margin/core test:watch
+pnpm --filter @bobeec/contribution-margin-core test:watch
 ```
 
 ## Documentation
@@ -259,3 +259,4 @@ If you have questions about contributing, feel free to:
 2. Ask in the pull request
 
 Thank you for contributing! 🎉
+

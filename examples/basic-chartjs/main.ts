@@ -1,9 +1,9 @@
 /**
  * CVP Analysis Chart Demo - v0.3.1
- * Comprehensive demonstration of the @contribution-margin/chartjs library
+ * Comprehensive demonstration of the @bobeec/contribution-margin-chart library
  * Bilingual (English/Japanese) demo with all features
  * 
- * @contribution-margin/chartjs ライブラリの包括的デモ
+ * @bobeec/contribution-margin-chart ライブラリの包括的デモ
  * 英語・日本語併記、全機能デモ
  */
 
@@ -25,7 +25,7 @@ import {
   ValueFormatter,
   type CVPInput,
   type DisplayOptions,
-} from '@contribution-margin/chartjs';
+} from '@bobeec/contribution-margin-chart';
 
 // Register Chart.js components
 Chart.register(
@@ -112,8 +112,8 @@ function initInteractiveChart(): void {
   interactiveChart = new Chart(canvas, config);
   updateMetricsPanel(input);
 }
-
-function getInputData(): CVPInput {
+     * Comprehensive demonstration of the @bobeec/contribution-margin-chart library
+     * @bobeec/contribution-margin-chart ライブラリの包括的デモ
   const salesInput = document.getElementById('sales') as HTMLInputElement;
   const variableInput = document.getElementById('variableCosts') as HTMLInputElement;
   const fixedInput = document.getElementById('fixedCosts') as HTMLInputElement;
@@ -126,13 +126,13 @@ function getInputData(): CVPInput {
   };
 }
 
-function getLossMode(): 'negative-bar' | 'separate' {
-  const lossModeSelect = document.getElementById('lossMode') as HTMLSelectElement;
-  return (lossModeSelect?.value as 'negative-bar' | 'separate') || 'negative-bar';
-}
-
-function updateChart(): void {
-  if (!interactiveChart) return;
+    import {
+      ContributionMarginPlugin,
+      createCVPChart,
+      createCVPChartConfig,
+      createTreemapChart,
+      createTreemapChartConfig,
+    } from '@bobeec/contribution-margin-chart';
 
   const input = getInputData();
   const lossMode = getLossMode();

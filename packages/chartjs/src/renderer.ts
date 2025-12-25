@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Renderer
+ * @bobeec/contribution-margin-chart - Renderer
  * Canvas rendering utilities for CVP charts
  */
 
@@ -9,8 +9,8 @@ import type {
   Annotation,
   DisplayOptions,
   CVPResult,
-} from '@contribution-margin/core';
-import { ValueFormatter, DEFAULT_DISPLAY_OPTIONS } from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
+import { ValueFormatter, DEFAULT_DISPLAY_OPTIONS } from '@bobeec/contribution-margin-core';
 
 /**
  * Renderer for CVP chart elements on Canvas

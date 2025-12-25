@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@contribution-margin/core": "workspace:*",
-    "@contribution-margin/chartjs": "workspace:*",
+    "@bobeec/contribution-margin-core": "workspace:*",
+    "@bobeec/contribution-margin-chart": "workspace:*",
     "chart.js": "^4.4.0"
   },
   "devDependencies": {

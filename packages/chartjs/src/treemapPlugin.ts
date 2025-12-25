@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Treemap Plugin
+ * @bobeec/contribution-margin-chart - Treemap Plugin
  * Chart.js plugin for CVP treemap charts
  * 
  * 赤字（損失）の場合：
@@ -18,7 +18,7 @@ import {
   type TreemapBlock,
   type TreemapLayoutOutput,
   type Annotation,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 
 import type { ContributionMarginPluginOptions } from './types';
 import { TreemapRenderer } from './TreemapRenderer';

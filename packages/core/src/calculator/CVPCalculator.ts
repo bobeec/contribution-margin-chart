@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core - CVP Calculator
+ * @bobeec/contribution-margin-core - CVP Calculator
  * Core calculation engine for CVP (Cost-Volume-Profit) analysis
  */
 

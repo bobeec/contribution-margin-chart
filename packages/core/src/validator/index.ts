@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core/validator
+ * @bobeec/contribution-margin-core/validator
  * CVP Input Validation
  */
 

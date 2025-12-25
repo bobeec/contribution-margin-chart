@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core - Type Definitions
+ * @bobeec/contribution-margin-core - Type Definitions
  * CVP (Cost-Volume-Profit) Analysis Chart Library
  *
  * ⚠️ Trademark Notice:

@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core/formatter
+ * @bobeec/contribution-margin-core/formatter
  * Value Formatting Utilities
  */
 

@@ -1,11 +1,11 @@
-# @contribution-margin/core
+# @bobeec/contribution-margin-core
 
 Core calculation and layout engine for CVP (Cost-Volume-Profit) analysis charts.
 
 ## Installation
 
 ```bash
-npm install @contribution-margin/core
+npm install @bobeec/contribution-margin-core
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ npm install @contribution-margin/core
 ### Basic Calculation
 
 ```typescript
-import { CVPCalculator, calculateCVP } from '@contribution-margin/core';
+import { CVPCalculator, calculateCVP } from '@bobeec/contribution-margin-core';
 
 // Using convenience function
 const result = calculateCVP({
@@ -34,7 +34,7 @@ const calculated = calculator.calculate(input);
 ### Validation
 
 ```typescript
-import { CVPValidator, validateCVP } from '@contribution-margin/core';
+import { CVPValidator, validateCVP } from '@bobeec/contribution-margin-core';
 
 const validation = validateCVP({
   sales: 10_000_000,
@@ -50,7 +50,7 @@ if (validation.warnings.length > 0) {
 ### Layout Generation
 
 ```typescript
-import { LayoutEngine, generateLayout } from '@contribution-margin/core';
+import { LayoutEngine, generateLayout } from '@bobeec/contribution-margin-core';
 
 const layout = generateLayout(input, {
   showBEPLine: true,
@@ -65,7 +65,7 @@ console.log(layout.annotations);  // BEP lines, etc.
 ### Value Formatting
 
 ```typescript
-import { ValueFormatter, formatValue } from '@contribution-margin/core';
+import { ValueFormatter, formatValue } from '@bobeec/contribution-margin-core';
 
 const formatter = new ValueFormatter({
   unitMode: 'thousand',
@@ -73,7 +73,7 @@ const formatter = new ValueFormatter({
   currencySymbol: '¥',
 });
 
-console.log(formatter.format(10_000_000));       // "¥10,000千円"
+console.log(formatter.format(10_000_000));       // "¥10,000十E�E"
 console.log(formatter.formatPercentage(0.38));   // "38.0%"
 ```
 
@@ -84,3 +84,4 @@ See the [main documentation](../../README.md) for full API reference.
 ## License
 
 MIT
+

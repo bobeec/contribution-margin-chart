@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/core/calculator
+ * @bobeec/contribution-margin-core/calculator
  * CVP Calculation Engine
  */
 

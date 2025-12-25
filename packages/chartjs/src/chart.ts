@@ -1,5 +1,5 @@
 /**
- * @contribution-margin/chartjs - Chart Factory
+ * @bobeec/contribution-margin-chart - Chart Factory
  * Convenience functions for creating CVP charts
  */
 
@@ -9,7 +9,7 @@ import type {
   CVPInputArray,
   DisplayOptions,
   MetricsConfig,
-} from '@contribution-margin/core';
+} from '@bobeec/contribution-margin-core';
 
 import type { ContributionMarginPluginOptions } from './types';
 
@@ -42,7 +42,7 @@ export interface CreateCVPChartOptions {
  * @example
  * ```typescript
  * import { Chart } from 'chart.js';
- * import { createCVPChartConfig, ContributionMarginPlugin } from '@contribution-margin/chartjs';
+ * import { createCVPChartConfig, ContributionMarginPlugin } from '@bobeec/contribution-margin-chart';
  *
  * Chart.register(ContributionMarginPlugin);
  *
@@ -133,7 +133,7 @@ export function createCVPChartConfig(options: CreateCVPChartOptions): ChartConfi
  * @example
  * ```typescript
  * import { Chart } from 'chart.js';
- * import { createCVPChart, ContributionMarginPlugin } from '@contribution-margin/chartjs';
+ * import { createCVPChart, ContributionMarginPlugin } from '@bobeec/contribution-margin-chart';
  *
  * Chart.register(ContributionMarginPlugin);
  *
