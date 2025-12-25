@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@bobeec/contribution-margin-core.svg)](https://www.npmjs.com/package/@bobeec/contribution-margin-core)
-[![npm version](https://img.shields.io/npm/v/@bobeec/contribution-margin-chart.svg)](https://www.npmjs.com/package/@bobeec/contribution-margin-chart)
+[![npm @bobeec/contribution-margin-core](https://img.shields.io/npm/v/@bobeec/contribution-margin-core.svg)](https://www.npmjs.com/package/@bobeec/contribution-margin-core)
+[![npm @bobeec/contribution-margin-chart](https://img.shields.io/npm/v/@bobeec/contribution-margin-chart.svg)](https://www.npmjs.com/package/@bobeec/contribution-margin-chart)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 
@@ -11,19 +11,25 @@
 
 **CVP（損益分岐点）グラフ作成ライブラリ**
 
+</div>
+
 ---
+
+## インストール
 
 ```bash
 npm install @bobeec/contribution-margin-chart chart.js
 ```
 
-### 2. HTML を追加
+## 使用方法
+
+### 1. HTML を追加
 
 ```html
 <canvas id="cvp-chart" width="800" height="400"></canvas>
 ```
 
-### 3. 初期化
+### 2. 初期化
 
 ```javascript
 import { Chart } from 'chart.js';
@@ -102,6 +108,8 @@ const config = createTreemapChartConfig({
 | `vivid` | 高コントラストで鮮やか | マーケティング資料 |
 | `monochrome` | グレースケール | 印刷物 |
 | `colorblind` | 色覚多様性に配慮 | ユニバーサルデザイン |
+
+### スキーム例
 
 ```javascript
 display: { colorScheme: 'pastel' }
