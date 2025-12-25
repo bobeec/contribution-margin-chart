@@ -1,6 +1,6 @@
 {
   "name": "@bobeec/contribution-margin-chart",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Chart.js plugin for CVP (Cost-Volume-Profit) analysis charts - Horizontal stacked bar charts for profit structure visualization",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -38,15 +38,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/contribution-margin/contribution-margin-chart.git",
+    "url": "https://github.com/bobeec/contribution-margin-chart.git",
     "directory": "packages/chartjs"
   },
-  "homepage": "https://github.com/contribution-margin/contribution-margin-chart/tree/main/packages/chartjs#readme",
+  "homepage": "https://github.com/bobeec/contribution-margin-chart/tree/main/packages/chartjs#readme",
   "peerDependencies": {
     "chart.js": "^3.0.0 || ^4.0.0"
   },
   "dependencies": {
-    "@bobeec/contribution-margin-core": "^0.4.0"
+    "@bobeec/contribution-margin-core": "workspace:*"
   },
   "devDependencies": {
     "chart.js": "^4.4.0",

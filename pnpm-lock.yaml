@@ -64,7 +64,7 @@ importers:
   packages/chartjs:
     dependencies:
       '@bobeec/contribution-margin-core':
-        specifier: ^0.4.0
+        specifier: workspace:*
         version: link:../core
     devDependencies:
       chart.js:

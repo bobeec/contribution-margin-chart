@@ -123,7 +123,7 @@ export class TreemapLayoutEngine {
     options?: DisplayOptions
   ): TreemapLayoutOutput {
     const displayOptions = this.mergeOptions(options);
-    
+
     // Update internal state
     this.colors = this.resolveColors(displayOptions);
     this.labels = getLabels(displayOptions.locale ?? 'ja-JP');
@@ -160,7 +160,7 @@ export class TreemapLayoutEngine {
   ): { blocks: TreemapBlock[]; heightExtension: number } {
     const blocks: TreemapBlock[] = [];
     const sales = input.sales;
-    
+
     if (sales <= 0) return { blocks, heightExtension: 1 };
 
     // 総コスト = 変動費 + 固定費
@@ -174,6 +174,15 @@ export class TreemapLayoutEngine {
     if (isLoss && lossDisplayMode === 'negative-bar') {
       // Total height should represent total costs when in loss
       heightExtension = totalCosts / sales;
+    } else if (isLoss && lossDisplayMode === 'separate') {
+      // separate モード：売上高(1.0) + 隙間 + 損失ブロックの高さ
+      // Note: ブロック生成ロジックと同期する必要がある (gap=0.01, minHeight=0.15)
+      const lossAmount = Math.abs(calculated.operatingProfit);
+      const lossRatio = lossAmount / sales;
+      const separateGap = 0.01;
+      const lossBlockHeight = Math.max(lossRatio, 0.15);
+
+      heightExtension = 1.0 + separateGap + lossBlockHeight;
     }
 
     // Calculate ratios based on sales (for normal case) or total costs (for loss)
@@ -275,7 +284,7 @@ export class TreemapLayoutEngine {
         // 黒字の場合：利益ブロックを固定費の下に表示
         const profitRatio = calculated.operatingProfit / sales;
         const profitY = contributionY + fixedRatio;
-        
+
         blocks.push({
           id: 'profit',
           type: 'profit',

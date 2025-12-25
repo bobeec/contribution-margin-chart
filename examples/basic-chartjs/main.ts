@@ -112,8 +112,12 @@ function initInteractiveChart(): void {
   interactiveChart = new Chart(canvas, config);
   updateMetricsPanel(input);
 }
-     * Comprehensive demonstration of the @bobeec/contribution-margin-chart library
-     * @bobeec/contribution-margin-chart ライブラリの包括的デモ
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+function getInputData(): CVPInput {
   const salesInput = document.getElementById('sales') as HTMLInputElement;
   const variableInput = document.getElementById('variableCosts') as HTMLInputElement;
   const fixedInput = document.getElementById('fixedCosts') as HTMLInputElement;
@@ -126,13 +130,13 @@ function initInteractiveChart(): void {
   };
 }
 
-    import {
-      ContributionMarginPlugin,
-      createCVPChart,
-      createCVPChartConfig,
-      createTreemapChart,
-      createTreemapChartConfig,
-    } from '@bobeec/contribution-margin-chart';
+function getLossMode(): 'negative-bar' | 'separate' {
+  const lossModeSelect = document.getElementById('lossMode') as HTMLSelectElement;
+  return (lossModeSelect?.value || 'negative-bar') as 'negative-bar' | 'separate';
+}
+
+function updateChart(): void {
+  if (!interactiveChart) return;
 
   const input = getInputData();
   const lossMode = getLossMode();

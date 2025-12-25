@@ -7,21 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-12-25
+
+### Fixed
+
+#### Encoding Issues (文字化け修正)
+
+- **HTML demo文字化け修正**: examples/basic-chartjs/index.htmlのUTF-8エンコーディング問題を解決
+  - 日本語テキストが正しく表示されるように修正
+  - すべてのラベル、説明、ボタンテキストを復元
+
+#### Repository Information (リポジトリ情報統一)
+
+- **Repository URL統一**: すべてのpackage.jsonで正しいGitHubリポジトリURLに統一
+  - 修正前: `contribution-margin/contribution-margin-chart`
+  - 修正後: `bobeec/contribution-margin-chart`
+  - npm公開準備完了
+
+### Changed
+
+- Version updated to 0.5.0 across all packages
+- Demo page version badge updated to v0.5.0
+- Package metadata improvements for npm publication
+
 ## [0.4.0] - 2025-12-24
 
 ### Added
 
-#### Correct Loss Display (赤字表示の正確な実裁E
+#### Correct Loss Display (赤字表示の正確な実装)
 
 - **Loss extends below chart area**: When in deficit (costs > sales), the loss portion now correctly extends below the zero line
   - Uses `heightExtension` scaling to fit both normal area and loss area within the chart
   - Visual representation: Loss "protrudes" below the sales area, like a negative bar chart
   - Both `negative-bar` and `separate` modes now work correctly
 
-- **赤字が下にはみ出る表示**: 総コストが売上を趁E��る場合、損失部刁E��ゼロラインより下に正しく表示されるよぁE��なりました
-  - `heightExtension`スケーリングで通常エリアと損失エリアを両方チャート�Eに収めめE
-  - 視覚的表現�E�棒グラフがゼロラインを下回るよぁE��、損失が下にはみ出めE
-  - `negative-bar`と`separate`両モードが正しく動佁E
+- **赤字が下にはみ出る表示**: 総コストが売上を超える場合、損失部分がゼロラインより下に正しく表示されるようになりました
+  - `heightExtension`スケーリングで通常エリアと損失エリアを両方チャートに収めるようにしました
+  - 視覚的表現としては、棒グラフがゼロラインを下回るように損失が下にはみ出します
+  - `negative-bar`と`separate`両モードが正しく動作するようになりました
 
 #### Slick-style Documentation (Slick風ドキュメンチE
 
@@ -45,16 +68,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Loss Display (赤字表示の修正)
 
-- **Loss extends below chart area**: When in deficit (赤孁E, the loss portion now correctly extends below the chart
+- **Loss extends below chart area**: When in deficit (赤字), the loss portion now correctly extends below the chart
   - In CVP analysis, when costs exceed sales, the right side (cost side) should visually extend below the sales (left side)
   - `negative-bar` mode: Loss block starts at y=1.0 (bottom of sales) and extends downward
   - Visual pattern (diagonal lines) added to emphasize the protruding loss area
   - This accurately represents that "total costs are larger than sales"
 
-- **CVP刁E��での正確な赤字表現**: 売上高＜総コスト�E場合、右側のコストエリアが売上高を趁E��て下に「�Eみ出る」表現を実裁E
-  - 赤字�E「左の売上に対して右のコストが大きい = 下にはみ出る」状慁E
-  - `negative-bar`モーチE 損失ブロチE��がグラフ下端から突き出めE
-  - 斜線パターンで「�Eみ出し」を視覚的に強調
+- **CVP分析での正確な赤字表現**: 売上高＜総コストの場合、右側のコストエリアが売上高を上回って下に「はみ出る」表現を実装しました
+  - 赤字は「左の売上に対して右のコストが大きい = 下にはみ出る」という状態を表します
+  - `negative-bar`モード: 損失ブロックがグラフ下端から突き出ます
+  - 斜線パターンで「はみ出し」を視覚的に強調
 
 ### Changed
 
@@ -69,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Documentation (English/Japanese Bilingual)
 
 - **README.md completely rewritten**: Bilingual documentation (English/Japanese)
-  - Clear separation with language anchors (#english, #日本誁E
+  - Clear separation with language anchors (#english, #日本語)
   - Complete API reference in both languages
   - Loss display mode documentation with examples
   - Chart layout diagram
@@ -99,24 +122,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### @bobeec/contribution-margin-chart v0.3.0
 
-- **BEP Line disabled by default**: Treemap形式ではBEP縦線をチE��ォルトで非表示に変更
+- **BEP Line disabled by default**: Treemap形式ではBEP縦線をデフォルトで非表示に変更
   - `showBEPLine: false` がデフォルト値に
-  - 忁E��な場合�E `showBEPLine: true` で明示皁E��有効化可能
+  - 必要な場合は `showBEPLine: true` で明示的に有効化可能
 
-- **Demo page completely redesigned**: チE��ペ�Eジを大幁E��拡允E
-  - 基本皁E��使ぁE��のサンプル
-  - インタラクチE��ブなチE���E�値の動的変更�E�E
-  - 黒字パターンのサンプル�E�高収益�E標準！E
-  - 赤字パターンのサンプル�E�軽度・重度�E�E
-  - 褁E��期間比輁E�Eサンプル
-  - カラースキームのサンプル�E�デフォルト�EパスチE��・モノクローム�E�E
+- **Demo page completely redesigned**: デモページを大幅に改善・拡充しました
+  - 基本的な使い方のサンプル
+  - インタラクティブなチャート（値の動的変更）
+  - 黒字パターンのサンプル（高収益・標準）
+  - 赤字パターンのサンプル（軽度・重度）
+  - 複数期間の比較サンプル
+  - カラースキームのサンプル（デフォルト、パステル、モノクローム）
   - APIリファレンスとコード侁E
 
 ### Removed
 
-- **Trademark notice simplified**: STRAC®啁E��注記を簡略匁E
-  - 「本ライブラリは一般皁E��CVP刁E��の実裁E��す」�Eみを表示
-  - 第三老E��標への言及を削除
+- **Trademark notice simplified**: STRAC®表記に関する注記を簡略化しました
+  - 「本ライブラリは一般的なCVP分析の実装です」という旨を表示
+  - 第三者の商標への言及を削除
 
 ## [0.2.0] - 2025-12-23
 
@@ -248,7 +271,8 @@ This is the first public release of the Contribution Margin Chart library.
 
 **Note:** This library provides general CVP (Cost-Volume-Profit) analysis visualization and is not affiliated with or related to any trademarked methodologies.
 
-[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/bobeec/contribution-margin-chart/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.5.0
 [0.4.0]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.4.0
 [0.3.2]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.2
 [0.3.1]: https://github.com/bobeec/contribution-margin-chart/releases/tag/v0.3.1

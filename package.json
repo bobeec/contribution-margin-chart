@@ -1,11 +1,11 @@
 {
   "name": "contribution-margin-chart",
-  "version": "0.0.0",
+  "version": "0.4.1",
   "private": true,
   "description": "CVP (Cost-Volume-Profit) analysis chart library for JavaScript - Visualize contribution margin, break-even point, and profit structure",
   "repository": {
     "type": "git",
-    "url": "https://github.com/contribution-margin/contribution-margin-chart.git"
+    "url": "https://github.com/bobeec/contribution-margin-chart.git"
   },
   "keywords": [
     "cvp-analysis",

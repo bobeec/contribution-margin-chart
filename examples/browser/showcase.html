@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribution Margin Chart Sandbox</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Library Bundle (Local) -->
+    <script src="../../packages/chartjs/dist/index.global.js"></script>
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #334155;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: #1e293b;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .control-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            padding: 0.25rem 0.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            font-weight: 500;
+            color: #64748b;
+            background: transparent;
+            margin-right: 2px;
+        }
+
+        .tab.active {
+            background: var(--surface);
+            color: var(--primary);
+            border-color: var(--border);
+            border-bottom-color: var(--surface);
+            margin-bottom: -1px;
+        }
+
+        /* Content Area */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+
+        /* Prism override */
+        pre[class*="language-"] {
+            margin: 0;
+            border-radius: 6px;
+            max-height: 400px;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: right;
+        }
+
+        .data-table th {
+            background-color: #f8fafc;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>CVP Chart Patterns</h1>
+
+        <!-- Template for JS generation -->
+        <div id="examples-container"></div>
+    </div>
+
+    <script>
+        const examples = [
+            {
+                id: 'basic',
+                title: '1. Basic Configuration',
+                desc: 'Standard chart with default settings.',
+                input: { sales: 10000, variableCosts: 4000, fixedCosts: 3000 },
+                configCode: `
+{
+    display: {
+        unitMode: 'thousand' // 'million', 'billion', 'raw'
+    }
+}`
+            },
+            {
+                id: 'values',
+                title: '2. With Values Embedded',
+                desc: 'Displays numerical values directly on the blocks.',
+                input: { sales: 12000, variableCosts: 7000, fixedCosts: 2000 },
+                configCode: `
+{
+    display: {
+        showValues: true,
+        unitMode: 'thousand',
+        locale: 'ja-JP'
+    }
+}`
+            },
+            {
+                id: 'table',
+                title: '3. With Data Table',
+                desc: 'Chart combined with a detailed HTML data table.',
+                input: { sales: 15000, variableCosts: 9000, fixedCosts: 4000 },
+                configCode: `
+{
+    display: {
+        showValues: false,
+        unitMode: 'thousand'
+    }
+}`,
+                hasTable: true
+            },
+            {
+                id: 'loss-standard',
+                title: '4. Loss (Standard/Extend)',
+                desc: 'Standard loss representation where the bar extends downwards.',
+                input: { sales: 8000, variableCosts: 5000, fixedCosts: 4000 },
+                configCode: `
+{
+    display: {
+        lossDisplayMode: 'negative-bar', // Default
+        unitMode: 'thousand'
+    }
+}`
+            },
+            {
+                id: 'loss-separate',
+                title: '5. Loss (Separate Block)',
+                desc: 'Loss is displayed as a separate, detached block.',
+                input: { sales: 8000, variableCosts: 5000, fixedCosts: 4000 },
+                configCode: `
+{
+    display: {
+        lossDisplayMode: 'separate',
+        unitMode: 'thousand'
+    }
+}`
+            },
+            {
+                id: 'colors',
+                title: '6. Custom Colors & Options',
+                desc: 'Showcasing vivid color scheme and percentage labels.',
+                input: { sales: 20000, variableCosts: 8000, fixedCosts: 6000 },
+                configCode: `
+{
+    display: {
+        colorScheme: 'vivid', // 'default', 'pastel', 'vivid', 'monochrome'
+        showPercentages: true,
+        showValues: true,
+        unitMode: 'thousand'
+    }
+}`
+            }
+        ];
+
+        const container = document.getElementById('examples-container');
+
+        examples.forEach(ex => {
+            // Create HTML Structure
+            const section = document.createElement('div');
+            section.className = 'card';
+            section.innerHTML = `
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">${ex.title}</h2>
+                    <small style="color: #64748b">${ex.desc}</small>
+                </div>
+            </div>
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('${ex.id}', 'result')">Result</div>
+                <div class="tab" onclick="switchTab('${ex.id}', 'code')">Code</div>
+            </div>
+            <div id="${ex.id}-result" class="tab-content active">
+                <div class="canvas-wrapper">
+                    <canvas id="canvas-${ex.id}"></canvas>
+                </div>
+                ${ex.hasTable ? `<div id="table-${ex.id}"></div>` : ''}
+            </div>
+            <div id="${ex.id}-code" class="tab-content">
+                <pre><code class="language-javascript" id="code-${ex.id}"></code></pre>
+            </div>
+        `;
+            container.appendChild(section);
+
+            // Generate Code String
+            const fullCode = `const config = ContributionMarginChart.createTreemapChartConfig({
+    input: ${JSON.stringify(ex.input, null, 4).replace(/"(\w+)":/g, '$1:')}, // Input Data
+    title: '${ex.title}',
+    ${ex.configCode.trim().substring(1, ex.configCode.trim().length - 1).trim() /* Strip outer braces */}
+});
+
+new Chart(document.getElementById('canvas-${ex.id}'), config);`;
+
+            // Render Code
+            document.getElementById(`code-${ex.id}`).textContent = fullCode;
+
+            // Execute Chart
+            // We evaluate a slightly modified version to actually run it
+            const runCode = `
+            const config${ex.id.replace(/-/g, '')} = ContributionMarginChart.createTreemapChartConfig({
+                input: ${JSON.stringify(ex.input)},
+                title: '${ex.title}',
+                ${ex.configCode.trim().substring(1, ex.configCode.trim().length - 1).trim()}
+            });
+            new Chart(document.getElementById('canvas-${ex.id}'), config${ex.id.replace(/-/g, '')});
+        `;
+
+            try {
+                eval(runCode);
+            } catch (e) {
+                console.error(e);
+            }
+
+            // Render Table if needed
+            if (ex.hasTable) {
+                const input = ex.input;
+                const profit = input.sales - input.variableCosts - input.fixedCosts;
+                const tableHtml = `
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>金額 (JPY)</th>
+                        <th>構成比 (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>売上高</td><td>¥${input.sales.toLocaleString()}</td><td>100%</td></tr>
+                    <tr><td>変動費</td><td>¥${input.variableCosts.toLocaleString()}</td><td>${(input.variableCosts / input.sales * 100).toFixed(1)}%</td></tr>
+                    <tr><td>固定費</td><td>¥${input.fixedCosts.toLocaleString()}</td><td>${(input.fixedCosts / input.sales * 100).toFixed(1)}%</td></tr>
+                    <tr style="font-weight:bold; background:#f1f5f9"><td>利益</td><td>¥${profit.toLocaleString()}</td><td>${(profit / input.sales * 100).toFixed(1)}%</td></tr>
+                </tbody>
+            </table>`;
+                document.getElementById(`table-${ex.id}`).innerHTML = tableHtml;
+            }
+        });
+
+        // Tab Switcher
+        window.switchTab = function (id, tabName) {
+            const root = document.getElementById(id + '-result').parentElement;
+            // Update Tabs
+            const tabs = root.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            // Find clicked tab (simple approach)
+            // In real app, bind event properly
+            event.target.classList.add('active');
+
+            // Update Content
+            root.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(`${id}-${tabName}`).style.display = 'block';
+        }
+
+        // Trigger Prism Highlight
+        Prism.highlightAll();
+    </script>
+</body>
+
+</html>

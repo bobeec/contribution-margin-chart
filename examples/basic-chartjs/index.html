@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CVP Analysis Treemap - Contribution Margin Chart v0.4.0</title>
+  <title>CVP Analysis Treemap - Contribution Margin Chart v0.5.0</title>
   <style>
     * {
       margin: 0;
@@ -448,15 +448,15 @@
 <body>
   <div class="container">
     <header>
-      <h1>📊 CVP Analysis Treemap <span class="version-badge">v0.4.0</span></h1>
+      <h1>📊 CVP Analysis Treemap <span class="version-badge">v0.5.0</span></h1>
       <p>
         <span style="color: #3498db;">Area-based CVP (Cost-Volume-Profit) Analysis Chart</span>
         <span style="color: #888;"> | </span>
-        <span style="color: #e74c3c;">面積ブロチE��図形式�ECVP�E�損益�E岐点�E��E析グラチE/span>
+        <span style="color: #e74c3c;">面積ブロック図形式のCVP分析・損益分岐点分析グラフ</span>
       </p>
       <div class="notice">
-        ℹ�E�E<strong>EN:</strong> This library implements general CVP analysis (Cost-Volume-Profit Analysis).<br>
-        ℹ�E�E<strong>JA:</strong> 本ライブラリは一般皁E��CVP刁E���E�Eost-Volume-Profit Analysis�E��E実裁E��す、E
+        ℹ️ <strong>EN:</strong> This library implements general CVP analysis (Cost-Volume-Profit Analysis).<br>
+        ℹ️ <strong>JA:</strong> 本ライブラリは一般的なCVP分析（Cost-Volume-Profit Analysis）を実装しています。
       </div>
     </header>
 
@@ -465,14 +465,14 @@
       <h3>📑 Contents | 目次</h3>
       <div class="toc-grid">
         <ul>
-          <li><a href="#example-basic">1. Basic Usage | 基本皁E��使ぁE��</a></li>
-          <li><a href="#example-interactive">2. Interactive Demo | インタラクチE��ブデモ</a></li>
-          <li><a href="#example-profit">3. Profit Case | 黒字�Eケース</a></li>
-          <li><a href="#example-loss">4. Loss Case | 赤字�Eケース</a></li>
+          <li><a href="#example-basic">1. Basic Usage | 基本的な使い方</a></li>
+          <li><a href="#example-interactive">2. Interactive Demo | インタラクティブデモ</a></li>
+          <li><a href="#example-profit">3. Profit Case | 黒字のケース</a></li>
+          <li><a href="#example-loss">4. Loss Case | 赤字のケース</a></li>
         </ul>
         <ul>
-          <li><a href="#example-loss-modes">5. Loss Display Modes | 赤字表示モーチE/a></li>
-          <li><a href="#example-comparison">6. Period Comparison | 期間比輁E/a></li>
+          <li><a href="#example-loss-modes">5. Loss Display Modes | 赤字表示モード</a></li>
+          <li><a href="#example-comparison">6. Period Comparison | 期間比較</a></li>
           <li><a href="#example-colors">7. Color Schemes | カラースキーム</a></li>
           <li><a href="#api-reference">8. API Reference | APIリファレンス</a></li>
         </ul>
@@ -481,7 +481,7 @@
 
     <!-- 1. Basic Usage -->
     <section id="example-basic" class="chart-section">
-      <h2>📘 1. Basic Usage | 基本皁E��使ぁE��</h2>
+      <h2>📘 1. Basic Usage | 基本的な使い方</h2>
       
       <div class="bilingual">
         <div class="en">
@@ -489,8 +489,8 @@
           <p>The simplest way to create a CVP Treemap chart. Just provide sales, variable costs, and fixed costs.</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>最もシンプルなCVP Treemapチャート�E作�E方法です。売上高、変動費、固定費の3つの値を�E力するだけです、E/p>
+          <div class="lang-label">日本語</div>
+          <p>最もシンプルなCVP Treemapチャートの作成方法です。売上高、変動費、固定費の3つの値を入力するだけです。</p>
         </div>
       </div>
 
@@ -509,25 +509,25 @@
 <span class="comment">// Register plugin | プラグインを登録</span>
 Chart.register(ContributionMarginTreemapPlugin);
 
-<span class="comment">// Create chart config | チャート設定を作�E</span>
+<span class="comment">// Create chart config | チャート設定を作成</span>
 <span class="keyword">const</span> config = createTreemapChartConfig({
   input: {
-    label: <span class="string">'December 2025 | 2025年12朁E</span>,
-    sales: <span class="number">10_000_000</span>,        <span class="comment">// Sales | 売上髁E ¥10,000,000</span>
+    label: <span class="string">'December 2025 | 2025年12月'</span>,
+    sales: <span class="number">10_000_000</span>,        <span class="comment">// Sales | 売上高: ¥10,000,000</span>
     variableCosts: <span class="number">4_000_000</span>, <span class="comment">// Variable Costs | 変動費: ¥4,000,000</span>
     fixedCosts: <span class="number">3_000_000</span>,    <span class="comment">// Fixed Costs | 固定費: ¥3,000,000</span>
   },
   title: <span class="string">'Basic CVP Chart'</span>,
 });
 
-<span class="comment">// Create chart | チャートを作�E</span>
+<span class="comment">// Create chart | チャートを作成</span>
 <span class="keyword">new</span> Chart(canvas, config);
       </div>
     </section>
 
     <!-- 2. Interactive Demo -->
     <section id="example-interactive" class="chart-section">
-      <h2>🎯 2. Interactive Demo | インタラクチE��ブデモ</h2>
+      <h2>🎯 2. Interactive Demo | インタラクティブデモ</h2>
       
       <div class="bilingual">
         <div class="en">
@@ -535,16 +535,16 @@ Chart.register(ContributionMarginTreemapPlugin);
           <p>Change values and see the chart update in real-time. Metrics are automatically recalculated.</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>値を変更してグラフ�E変化を確認できます。指標�Eリアルタイムで再計算されます、E/p>
+          <div class="lang-label">日本語</div>
+          <p>値を変更してグラフの変化を確認できます。指標はリアルタイムで再計算されます。</p>
         </div>
       </div>
 
       <div class="data-input">
-        <h3>Input Data (thousands) | 入力データ�E�千冁E��位！E/h3>
+        <h3>Input Data (thousands) | 入力データ（千円単位）</h3>
         <div class="input-grid">
           <div class="input-group">
-            <label for="sales">Sales | 売上髁E(PQ)</label>
+            <label for="sales">Sales | 売上高(PQ)</label>
             <input type="number" id="sales" value="12500" min="0">
           </div>
           <div class="input-group">
@@ -556,10 +556,10 @@ Chart.register(ContributionMarginTreemapPlugin);
             <input type="number" id="fixedCosts" value="3700" min="0">
           </div>
           <div class="input-group">
-            <label for="lossMode">Loss Mode | 赤字表示モーチE/label>
+            <label for="lossMode">Loss Mode | 赤字表示モード</label>
             <select id="lossMode">
-              <option value="negative-bar">Extend Down | 下に足が�EめE/option>
-              <option value="separate">Separate Block | 別ブロチE��</option>
+              <option value="negative-bar">Extend Down | 下に足が出る</option>
+              <option value="separate">Separate Block | 別ブロック</option>
             </select>
           </div>
         </div>
@@ -573,7 +573,7 @@ Chart.register(ContributionMarginTreemapPlugin);
       <div class="legend">
         <div class="legend-item">
           <div class="legend-color" style="background: #4A90E2;"></div>
-          <span>Sales | 売上髁E/span>
+          <span>Sales | 売上高</span>
         </div>
         <div class="legend-item">
           <div class="legend-color" style="background: #F5A623;"></div>
@@ -581,7 +581,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         </div>
         <div class="legend-item">
           <div class="legend-color" style="background: #7ED321;"></div>
-          <span>Contribution Margin | 限界利盁E/span>
+          <span>Contribution Margin | 限界利益</span>
         </div>
         <div class="legend-item">
           <div class="legend-color" style="background: #9B9B9B;"></div>
@@ -589,7 +589,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         </div>
         <div class="legend-item">
           <div class="legend-color" style="background: #417505;"></div>
-          <span>Profit | 利盁E/span>
+          <span>Profit | 利益</span>
         </div>
         <div class="legend-item">
           <div class="legend-color" style="background: #D0021B;"></div>
@@ -601,7 +601,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <!-- Metrics will be inserted here -->
       </div>
 
-      <h3>Code Example (Dynamic Update) | コード例（動皁E��新�E�E/h3>
+      <h3>Code Example (Dynamic Update) | コード例（動的更新）</h3>
       <div class="code-block">
 <span class="comment">// Update chart function | チャート更新関数</span>
 <span class="keyword">function</span> updateChart(chart, newData) {
@@ -609,7 +609,7 @@ Chart.register(ContributionMarginTreemapPlugin);
   <span class="keyword">if</span> (options) {
     options.input = newData;
   }
-  chart.$cvpTreemap = <span class="keyword">undefined</span>; <span class="comment">// Clear cache | キャチE��ュをクリア</span>
+  chart.$cvpTreemap = <span class="keyword">undefined</span>; <span class="comment">// Clear cache | キャッシュをクリア</span>
   chart.update();
 }
       </div>
@@ -617,7 +617,7 @@ Chart.register(ContributionMarginTreemapPlugin);
 
     <!-- 3. Profit Case -->
     <section id="example-profit" class="chart-section">
-      <h2>💰 3. Profit Case | 黒字�Eケース</h2>
+      <h2>💰 3. Profit Case | 黒字のケース</h2>
       
       <div class="bilingual">
         <div class="en">
@@ -625,8 +625,8 @@ Chart.register(ContributionMarginTreemapPlugin);
           <p>When operating profitably, the profit area is shown in dark green.</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>経営利益が出てぁE���E�黒字）場合、利益部刁E�E濁E��緑色で表示されます、E/p>
+          <div class="lang-label">日本語</div>
+          <p>経営利益が出ている（黒字）場合、利益部分が濃い緑色で表示されます。</p>
         </div>
       </div>
 
@@ -675,7 +675,7 @@ Chart.register(ContributionMarginTreemapPlugin);
 
     <!-- 4. Loss Case -->
     <section id="example-loss" class="chart-section">
-      <h2>📉 4. Loss Case | 赤字�Eケース</h2>
+      <h2>📉 4. Loss Case | 赤字のケース</h2>
       
       <div class="bilingual">
         <div class="en">
@@ -683,8 +683,8 @@ Chart.register(ContributionMarginTreemapPlugin);
           <p>When operating at a loss, the loss area is shown in red. Loss display mode can be configured.</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>経営損失�E�赤字）�E場合、損失部刁E�E赤色で表示されます。表示モードを選択できます、E/p>
+          <div class="lang-label">日本語</div>
+          <p>経営損失（赤字）の場合、損失部分は赤色で表示されます。表示モードを選択できます。</p>
         </div>
       </div>
 
@@ -692,7 +692,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">Minor Loss</span>
-            <span class="ja">軽度の赤孁E/span>
+            <span class="ja">軽度の赤字</span>
           </div>
           <div class="chart-container small" id="lossChart1Container">
             <canvas id="lossChart1"></canvas>
@@ -705,7 +705,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">Major Loss</span>
-            <span class="ja">重度の赤孁E/span>
+            <span class="ja">重度の赤字</span>
           </div>
           <div class="chart-container small" id="lossChart2Container">
             <canvas id="lossChart2"></canvas>
@@ -720,7 +720,7 @@ Chart.register(ContributionMarginTreemapPlugin);
 
     <!-- 5. Loss Display Modes -->
     <section id="example-loss-modes" class="chart-section">
-      <h2>🔴 5. Loss Display Modes | 赤字表示モーチE/h2>
+      <h2>🔴 5. Loss Display Modes | 赤字表示モード</h2>
       
       <div class="bilingual">
         <div class="en">
@@ -728,8 +728,8 @@ Chart.register(ContributionMarginTreemapPlugin);
           <p>Choose how losses are displayed: extending downward from the chart, or as a separate block to the right.</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>赤字�E表示方法を選択できます：グラフ�E下に足が�Eる方式、また�E右側に別ブロチE��で表示する方式、E/p>
+          <div class="lang-label">日本語</div>
+          <p>赤字表示方法を選択できます：グラフの下に損失が突出する方式、または右側に別ブロックとして表示する方式があります。</p>
         </div>
       </div>
 
@@ -737,7 +737,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="mode-card active">
           <h4>
             <span class="example-badge en">negative-bar</span>
-            Extend Downward | 下に足が�EめE
+            Extend Downward | 下に足が出る
           </h4>
           <div class="bilingual" style="margin-bottom: 15px;">
             <div class="en">
@@ -745,8 +745,8 @@ Chart.register(ContributionMarginTreemapPlugin);
               <p style="margin: 0; font-size: 0.85rem;">Loss extends below the fixed costs area. Shows the magnitude of loss relative to the chart.</p>
             </div>
             <div class="ja">
-              <div class="lang-label">日本誁E/div>
-              <p style="margin: 0; font-size: 0.85rem;">固定費エリアの下に損失部刁E��突き出ます。グラフに対する損失の大きさを示します、E/p>
+              <div class="lang-label">日本語</div>
+              <p style="margin: 0; font-size: 0.85rem;">固定費エリアの下に損失部分が突き出ます。グラフに対する損失の大きさを示します。</p>
             </div>
           </div>
           <div class="chart-container small" id="lossModeChart1Container">
@@ -756,7 +756,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="mode-card">
           <h4>
             <span class="example-badge ja">separate</span>
-            Separate Block | 別ブロチE��刁E��
+            Separate Block | 別ブロック
           </h4>
           <div class="bilingual" style="margin-bottom: 15px;">
             <div class="en">
@@ -764,8 +764,8 @@ Chart.register(ContributionMarginTreemapPlugin);
               <p style="margin: 0; font-size: 0.85rem;">Loss is shown as a separate red block. Cleaner visualization for reporting.</p>
             </div>
             <div class="ja">
-              <div class="lang-label">日本誁E/div>
-              <p style="margin: 0; font-size: 0.85rem;">損失部刁E��別ブロチE��として表示します。レポ�Eト向け�Eクリーンな可視化、E/p>
+              <div class="lang-label">日本語</div>
+              <p style="margin: 0; font-size: 0.85rem;">損失部分を別の赤いブロックとして表示します。レポート向けにクリーンな可視化です。</p>
             </div>
           </div>
           <div class="chart-container small" id="lossModeChart2Container">
@@ -776,7 +776,7 @@ Chart.register(ContributionMarginTreemapPlugin);
 
       <h3>Code Example | コード侁E/h3>
       <div class="code-block">
-<span class="comment">// Mode 1: Extend downward (default) | モーチE: 下に足が�Eる（デフォルト！E/span>
+<span class="comment">// Mode 1: Extend downward (default) | モード: 下に足が出る（デフォルト）</span>
 <span class="keyword">const</span> config1 = createTreemapChartConfig({
   input: { sales: <span class="number">10_000_000</span>, variableCosts: <span class="number">5_000_000</span>, fixedCosts: <span class="number">6_000_000</span> },
   display: {
@@ -784,11 +784,11 @@ Chart.register(ContributionMarginTreemapPlugin);
   },
 });
 
-<span class="comment">// Mode 2: Separate block | モーチE: 別ブロチE��</span>
+<span class="comment">// Mode 2: Separate block | モード: 別ブロック</span>
 <span class="keyword">const</span> config2 = createTreemapChartConfig({
   input: { sales: <span class="number">10_000_000</span>, variableCosts: <span class="number">5_000_000</span>, fixedCosts: <span class="number">6_000_000</span> },
   display: {
-    lossDisplayMode: <span class="string">'separate'</span>, <span class="comment">// Loss as separate block | 損失を別ブロチE��で表示</span>
+    lossDisplayMode: <span class="string">'separate'</span>, <span class="comment">// Loss as separate block | 損失を別ブロックで表示</span>
   },
 });
       </div>
@@ -796,7 +796,7 @@ Chart.register(ContributionMarginTreemapPlugin);
 
     <!-- 6. Period Comparison -->
     <section id="example-comparison" class="chart-section">
-      <h2>📅 6. Period Comparison | 期間比輁E/h2>
+      <h2>📅 6. Period Comparison | 期間比較</h2>
       
       <div class="bilingual">
         <div class="en">
@@ -804,8 +804,8 @@ Chart.register(ContributionMarginTreemapPlugin);
           <p>Compare CVP charts across multiple periods (monthly, quarterly, etc.).</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>月次めE��半期など、褁E��期間のCVPグラフを並べて比輁E��きます、E/p>
+          <div class="lang-label">日本語</div>
+          <p>月次や半期など、複数期間のCVPグラフを並べて比較できます。</p>
         </div>
       </div>
 
@@ -813,7 +813,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">October</span>
-            <span class="ja">10朁E/span>
+            <span class="ja">10月</span>
           </div>
           <div class="chart-container small" id="monthChart1Container">
             <canvas id="monthChart1"></canvas>
@@ -822,7 +822,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">November</span>
-            <span class="ja">11朁E/span>
+            <span class="ja">11月</span>
           </div>
           <div class="chart-container small" id="monthChart2Container">
             <canvas id="monthChart2"></canvas>
@@ -831,7 +831,7 @@ Chart.register(ContributionMarginTreemapPlugin);
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">December</span>
-            <span class="ja">12朁E/span>
+            <span class="ja">12月</span>
           </div>
           <div class="chart-container small" id="monthChart3Container">
             <canvas id="monthChart3"></canvas>
@@ -842,9 +842,9 @@ Chart.register(ContributionMarginTreemapPlugin);
       <h3>Code Example | コード侁E/h3>
       <div class="code-block">
 <span class="keyword">const</span> monthlyData = [
-  { label: <span class="string">'Oct | 10朁E</span>, sales: <span class="number">10_000_000</span>, variableCosts: <span class="number">5_000_000</span>, fixedCosts: <span class="number">3_000_000</span> },
-  { label: <span class="string">'Nov | 11朁E</span>, sales: <span class="number">9_000_000</span>, variableCosts: <span class="number">4_500_000</span>, fixedCosts: <span class="number">3_000_000</span> },
-  { label: <span class="string">'Dec | 12朁E</span>, sales: <span class="number">12_000_000</span>, variableCosts: <span class="number">6_000_000</span>, fixedCosts: <span class="number">3_000_000</span> },
+  { label: <span class="string">'Oct | 10月'</span>, sales: <span class="number">10_000_000</span>, variableCosts: <span class="number">5_000_000</span>, fixedCosts: <span class="number">3_000_000</span> },
+  { label: <span class="string">'Nov | 11月'</span>, sales: <span class="number">9_000_000</span>, variableCosts: <span class="number">4_500_000</span>, fixedCosts: <span class="number">3_000_000</span> },
+  { label: <span class="string">'Dec | 12月'</span>, sales: <span class="number">12_000_000</span>, variableCosts: <span class="number">6_000_000</span>, fixedCosts: <span class="number">3_000_000</span> },
 ];
 
 monthlyData.forEach((data, index) => {
@@ -864,8 +864,8 @@ monthlyData.forEach((data, index) => {
           <p>Built-in color schemes for different use cases: default, pastel, monochrome, and colorblind-friendly.</p>
         </div>
         <div class="ja">
-          <div class="lang-label">日本誁E/div>
-          <p>用途に合わせた絁E��込みカラースキーム�E�デフォルト、パスチE��、モノクローム、色覚対応、E/p>
+          <div class="lang-label">日本語</div>
+          <p>用途に合わせた組み込みカラースキーム：デフォルト、パステル、モノクローム、色覚対応などがあります。</p>
         </div>
       </div>
 
@@ -873,7 +873,7 @@ monthlyData.forEach((data, index) => {
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">Default</span>
-            <span class="ja">チE��ォルチE/span>
+            <span class="ja">デフォルト</span>
           </div>
           <div class="chart-container small" id="colorChart1Container">
             <canvas id="colorChart1"></canvas>
@@ -882,7 +882,7 @@ monthlyData.forEach((data, index) => {
         <div class="chart-card">
           <div class="chart-card-title">
             <span class="en">Pastel</span>
-            <span class="ja">パスチE��</span>
+            <span class="ja">パステル</span>
           </div>
           <div class="chart-container small" id="colorChart2Container">
             <canvas id="colorChart2"></canvas>
@@ -901,7 +901,7 @@ monthlyData.forEach((data, index) => {
 
       <h3>Code Example | コード侁E/h3>
       <div class="code-block">
-<span class="comment">// Built-in schemes | 絁E��込みスキーム</span>
+<span class="comment">// Built-in schemes | 組み込みスキーム</span>
 <span class="keyword">const</span> config = createTreemapChartConfig({
   input: { <span class="comment">/* ... */</span> },
   display: {
@@ -930,14 +930,14 @@ monthlyData.forEach((data, index) => {
     <section id="api-reference" class="chart-section">
       <h2>📚 8. API Reference | APIリファレンス</h2>
 
-      <h3>Installation | インスト�Eル</h3>
+      <h3>Installation | インストール</h3>
       <div class="code-block">
 npm install @bobeec/contribution-margin-chart chart.js
-<span class="comment"># or | また�E</span>
+<span class="comment"># or | または</span>
 pnpm add @bobeec/contribution-margin-chart chart.js
       </div>
 
-      <h3>CVPCalculator - Metric Calculation | 持E��計箁E/h3>
+      <h3>CVPCalculator - Metric Calculation | 指標計算</h3>
       <div class="code-block">
 <span class="keyword">import</span> { CVPCalculator, ValueFormatter } <span class="keyword">from</span> <span class="string">'@bobeec/contribution-margin-chart'</span>;
 
@@ -950,7 +950,7 @@ pnpm add @bobeec/contribution-margin-chart chart.js
 
 console.log(result.calculated.contributionMargin);     <span class="comment">// 6,500,000 | 限界利盁E/span>
 console.log(result.calculated.contributionMarginRatio); <span class="comment">// 0.52 (52%)</span>
-console.log(result.calculated.breakEvenPoint);         <span class="comment">// 7,115,385 | 損益刁E��点</span>
+console.log(result.calculated.breakEvenPoint);         <span class="comment">// 7,115,385 | 損益分岐点</span>
 console.log(result.calculated.operatingProfit);        <span class="comment">// 2,800,000 | 経営利盁E/span>
 console.log(result.calculated.safetyMarginRatio);      <span class="comment">// 0.431 (43.1%)</span>
       </div>
@@ -963,7 +963,7 @@ console.log(result.calculated.safetyMarginRatio);      <span class="comment">// 
   currencySymbol: <span class="string">'¥'</span>,
 });
 
-formatter.format(<span class="number">6_500_000</span>);           <span class="comment">// "¥6,500十E�E"</span>
+formatter.format(<span class="number">6_500_000</span>);           <span class="comment">// "¥6,500千円"</span>
 formatter.formatPercentage(<span class="number">0.52</span>);     <span class="comment">// "52.0%"</span>
       </div>
 
@@ -974,7 +974,7 @@ formatter.formatPercentage(<span class="number">0.52</span>);     <span class="c
   display: {
     showValues: <span class="keyword">true</span>,             <span class="comment">// Show values | 金額を表示</span>
     showLabels: <span class="keyword">true</span>,             <span class="comment">// Show labels | ラベルを表示</span>
-    showPercentages: <span class="keyword">false</span>,       <span class="comment">// Show percentages | パ�EセンチE�Eジを表示</span>
+    showPercentages: <span class="keyword">false</span>,       <span class="comment">// Show percentages | パーセンテージを表示</span>
     unitMode: <span class="string">'thousand'</span>,         <span class="comment">// Unit mode | 単位モーチE/span>
     locale: <span class="string">'ja-JP'</span>,              <span class="comment">// Locale | ロケール</span>
     currencySymbol: <span class="string">'¥'</span>,          <span class="comment">// Currency | 通貨記号</span>
@@ -987,7 +987,7 @@ formatter.formatPercentage(<span class="number">0.52</span>);     <span class="c
 
     <footer>
       <p>
-        <strong>@bobeec/contribution-margin-chart</strong> v0.4.0 |
+        <strong>@bobeec/contribution-margin-chart</strong> v0.5.0 |
         <a href="https://github.com/bobeec/contribution-margin-chart" target="_blank">GitHub</a>
       </p>
       <p>MIT License | Built with Chart.js | Treemap Layout</p>

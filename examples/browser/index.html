@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribution Margin Chart Browser Example</title>
+    <!-- Load Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Load our local bundle (simulating CDN usage of the new build) -->
+    <script src="../../packages/chartjs/dist/index.global.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .canvas-container {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Contribution Margin Chart Example (Browser/CDN)</h1>
+    <p>This example demonstrates the library running directly in the browser using a static script tag, without any
+        build tools.</p>
+
+    <div class="canvas-container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // Data for the chart
+        const data = {
+            labels: ['Product A'],
+            datasets: [
+                {
+                    label: 'Sales Revenue',
+                    data: [1000],
+                    backgroundColor: '#4BC0C0',
+                },
+                {
+                    label: 'Variable Costs',
+                    data: [600],
+                    backgroundColor: '#FF6384',
+                },
+                {
+                    label: 'Fixed Costs',
+                    // Use the global factory function if available, otherwise construct manually
+                    const input = {
+                        sales: 10000000,
+                        variableCosts: 4000000,
+                        fixedCosts: 3000000
+                    };
+
+                    let config;
+
+                    if(window.ContributionMarginChart && window.ContributionMarginChart.createTreemapChartConfig) {
+                    config = window.ContributionMarginChart.createTreemapChartConfig({
+                        input: input,
+                        title: 'CVP Analysis (Treemap Style)',
+                        display: {
+                            showValues: true,
+                            showLabels: true,
+                            unitMode: 'thousand',
+                            locale: 'ja-JP'
+                        }
+                    });
+                } else {
+                    // Fallback manual config if factory not found (debugging purpose)
+                    config = {
+                        type: 'treemap', // Assuming treemap plugin uses this type
+                        data: {
+                            datasets: []
+                        },
+                        options: {
+                            plugins: {
+                                contributionMarginTreemap: {
+                // The 'Fixed Costs' dataset was incomplete and the config logic was misplaced here.
+                // The treemap chart config is generated separately below.
+            ]
+        };
+
+        // Use the global factory function if available, otherwise construct manually
+        const input = {
+            sales: 10000000,
+            variableCosts: 4000000,
+            fixedCosts: 3000000
+        };
+
+        let config;
+
+        if (window.ContributionMarginChart && window.ContributionMarginChart.createTreemapChartConfig) {
+            console.log('Using factory function to create config');
+            config = window.ContributionMarginChart.createTreemapChartConfig({
+                input: input,
+                title: 'CVP Analysis (Treemap Style)',
+                display: {
+                    showValues: true,
+                    showLabels: true,
+                    unitMode: 'thousand',
+                    locale: 'ja-JP'
+                }
+            });
+        } else {
+            console.warn('Factory function not found! using fallback manual config');
+            // Fallback manual config if factory not found (debugging purpose)
+            config = {
+                type: 'treemap', // Assuming treemap plugin uses this type
+                data: {
+                    datasets: []
+                },
+                options: {
+                    plugins: {
+                        contributionMarginTreemap: {
+                            input: input,
+                            display: {
+                                showValues: true,
+                                unitMode: 'thousand'
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        console.log('Chart Config:', config);
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, config);
+    </script>
+</body>
+
+</html>

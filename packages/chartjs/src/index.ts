@@ -9,10 +9,14 @@
  */
 
 // Plugin - Horizontal Stacked Bar (Original)
-export { ContributionMarginPlugin, registerContributionMarginPlugin } from './plugin';
+// Plugin - Horizontal Stacked Bar (Original)
+import { ContributionMarginPlugin, registerContributionMarginPlugin } from './plugin';
+export { ContributionMarginPlugin, registerContributionMarginPlugin };
 
 // Plugin - Treemap (v0.2.0)
-export { ContributionMarginTreemapPlugin, registerTreemapPlugin } from './treemapPlugin';
+// Plugin - Treemap (v0.2.0)
+import { ContributionMarginTreemapPlugin, registerTreemapPlugin } from './treemapPlugin';
+export { ContributionMarginTreemapPlugin, registerTreemapPlugin };
 
 // Chart factory functions
 export { createCVPChart, createCVPChartConfig, updateCVPChart } from './chart';
@@ -63,4 +67,11 @@ export {
 } from '@bobeec/contribution-margin-core';
 
 // Re-export treemap types
+// @ts-ignore
 export type { TreemapBlock, TreemapLayoutOutput } from '@bobeec/contribution-margin-core';
+
+// Auto-register plugin in browser environments if Chart.js is present
+if (typeof window !== 'undefined' && (window as any).Chart) {
+  (window as any).Chart.register(ContributionMarginPlugin);
+  (window as any).Chart.register(ContributionMarginTreemapPlugin);
+}
